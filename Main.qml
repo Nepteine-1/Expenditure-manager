@@ -30,6 +30,7 @@ Window {
     }
 
     Item {
+        // useful for chart widget only
         id:chart_widget_updater
 
         function update_year_chooser() {
@@ -91,8 +92,59 @@ Window {
         }
     }
 
+    Column {
+        id: list_widget
+        anchors.top: parent.top
+
+        Row {
+            TextField {
+                id: new_list_dep_name
+                placeholderText: "new liste name"
+                width: 150
+            }
+
+            Button {
+                text: "Créer"
+
+                onClicked: {
+                    if(new_list_dep_name.text!=="") {
+                        if(db.executeQuery("INSERT INTO Liste (nom) VALUES (\"%1\");".arg(new_list_dep_name.text))) {
+                            new_list_dep_name.text = "";
+                            listCbGrpCategoryChooser.update()
+                        }
+                    }
+                }
+            }
+        }
+
+        Row {
+            Label {
+                text: "<font color=\"black\">Selectionner une liste:</font>"
+            }
+
+            ComboBox {
+                id: listCbGrpCategoryChooser
+                width: 150
+                model: []
+
+                Component.onCompleted: {
+                    listCbGrpCategoryChooser.update()
+                }
+
+                function update() {
+                    console.log("*** LIST CHOOSER UPDATE ***")
+                    db.executeQuery("SELECT GROUP_CONCAT(nom) FROM Liste");
+                    let barSetElmt = db.queryResult.split(",");
+                    listCbGrpCategoryChooser.model = barSetElmt;
+                    listCbGrpCategoryChooser.currentIndex=0;
+                }
+            }
+        }
+    }
+
     Column{
         id: chart_widget
+        anchors.top: list_widget.bottom
 
         // Choix d'afficher l'année ou le mois
         Row {
@@ -147,7 +199,7 @@ Window {
                     db.executeQuery("SELECT GROUP_CONCAT(nom) FROM Categorie");
                     let barSetElmt = db.queryResult.split(",");
                     barSetElmt.unshift("Tout");
-                    model = barSetElmt;
+                    barChartsCbGrpCategoryChooser.model = barSetElmt;
                     barChartsCbGrpCategoryChooser.currentIndex=0;
                     chart_widget_updater.update_year_chooser()
                 }

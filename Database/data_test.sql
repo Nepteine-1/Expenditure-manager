@@ -7,7 +7,7 @@ CREATE TABLE `Depense` (
 	`date` DATE NOT NULL DEFAULT CURRENT_DATE,
 	`quantite` INTEGER NOT NULL DEFAULT 1,
 	`prix` INTEGER NOT NULL,
-	`liste` VARCHAR(30) NOT NULL DEFAULT 'DEFAULT LIST',
+	`id_liste` VARCHAR(30) NOT NULL DEFAULT 1,
 	`id_categorie` INTEGER,
 	`marque` VARCHAR(25),
 	`fournisseur` VARCHAR(50),
@@ -30,6 +30,16 @@ VALUES
 	('Assurance'),
 	('Immobilier'),
 	('Mutuelle');
+	
+DROP TABLE IF EXISTS `Liste`;
+CREATE TABLE `Liste` (
+	`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`nom` VARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO `Liste` (`nom`)
+VALUES
+	('DEFAULT');
 
 INSERT INTO `Depense` (`nom`, `quantite`, `id_categorie`, `date`, `marque`, `fournisseur`, `prix`)
 VALUES
