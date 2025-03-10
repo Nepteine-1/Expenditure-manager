@@ -21,42 +21,78 @@ Window {
         property string query_operation: "SUM"
         property string query_periode: "%Y"
         property string query_where : ""
-        property string query_selected_year : { db.executeQuery("SELECT MAX(strftime('%Y',date)) FROM Depense"); db.queryResult; }
+        property string query_selected_year : (function () { db.executeQuery("SELECT MAX(strftime('%Y',date)) FROM Depense"); return db.queryResult;})()
         property string query_attribute: "prix*quantite"
-        property string query_completed: ""
 
         function buildQuerry() {
-            queryBuilder.query_completed = "SELECT " + queryBuilder.query_operation + "(" + queryBuilder.query_attribute + ") as op, strftime('" + queryBuilder.query_periode + "', date) FROM Depense " + queryBuilder.query_where + " GROUP BY strftime('" + queryBuilder.query_periode + "', date)";
+            return "SELECT " + queryBuilder.query_operation + "(" + queryBuilder.query_attribute + ") as op, strftime('" + queryBuilder.query_periode + "', date) FROM Depense " + queryBuilder.query_where + " GROUP BY strftime('" + queryBuilder.query_periode + "', date)";
+        }
+    }
+
+    Item {
+        id:chart_widget_updater
+
+        function update_year_chooser() {
+            console.log("*** UPDATE YEAR CHOOSER ***")
+            if(barChartsCbGrpCategoryChooser.currentIndex === 0) db.executeQuery("SELECT MAX(strftime('%Y',date)), MIN(strftime('%Y',date)) FROM Depense");
+            else db.executeQuery("SELECT MAX(strftime('%Y',date)), MIN(strftime('%Y',date)) FROM Depense JOIN Categorie on Categorie.id = Depense.id_categorie WHERE Categorie.nom = '"+barChartsCbGrpCategoryChooser.currentText+"'");
+            if(!isNaN(Number(db.queryResult.split("|")[0])) && !isNaN(Number(db.queryResult.split("|")[1]))) {
+                if(barChartsRbGrpYearChooser.to !== Number(db.queryResult.split("|")[0]) || barChartsRbGrpYearChooser.from !== Number(db.queryResult.split("|")[1])) barChartsRbGrpYearChooser.changedbyUser=false;
+                barChartsRbGrpYearChooser.to = Number(db.queryResult.split("|")[0]);
+                barChartsRbGrpYearChooser.from = Number(db.queryResult.split("|")[1]);
+                barChartsRbGrpYearChooser.changedbyUser=true
+            }
+        }
+
+        function update_category() {
+            console.log("*** UPDATE CATEGORY CHOOSER ***")
+            console.log(queryBuilder.query_selected_year)
+            if(barChartsCbGrpCategoryChooser.currentIndex === 0)
+                if(barChartsRbGrpPeriodChooserMonthBtn.checked) {
+                    queryBuilder.query_where = "WHERE strftime('%Y',date) = '"+queryBuilder.query_selected_year+"'";
+                }
+                else {
+                    queryBuilder.query_where = "";
+                }
+            else {
+                queryBuilder.query_where = "JOIN Categorie on Categorie.id = Depense.id_categorie WHERE Categorie.nom LIKE '"+barChartsCbGrpCategoryChooser.currentText+"'";
+                if(barChartsRbGrpPeriodChooserMonthBtn.checked) {
+                    queryBuilder.query_where+= " AND strftime('%Y',date) = '"+queryBuilder.query_selected_year+"'";
+                }
+            }
+        }
+
+        function update_chart() {
+            console.log("*** UPDATE CHARTS ***")
+            mySeries.clear()
+
+            let query = queryBuilder.buildQuerry();
+            db.executeQuery("SELECT MAX(op) FROM ("+query+")")
+            axisY8.max = Number(db.queryResult.split("|")[0])+ Number(db.queryResult.split("|")[0])*(0.1)
+            db.executeQuery(query)
+
+            let newCategories = []
+            let barSetElmt = []
+            newCategories.push(db.queryResult.split("|")[1])
+            barSetElmt.push(db.queryResult.split("|")[0])
+            while(db.nextQuerry()) {
+                newCategories.push(db.queryResult.split("|")[1])
+                barSetElmt.push(db.queryResult.split("|")[0])
+            }
+
+            chart_legend.categories = newCategories
+            mySeries.append(queryBuilder.query_operation + " " + queryBuilder.query_attribute, barSetElmt)
+        }
+
+        function full_update() {
+            chart_widget_updater.update_year_chooser()
+            chart_widget_updater.update_category()
+            chart_widget_updater.update_chart()
         }
     }
 
     Column{
         id: chart_widget
-
-        // Test de graphiques en barres
-        // Choix de compte total, sum des prix selon la périodicité ou la moyenne
-        Row {
-            id: barChartsRbGrpOperationChooser
-
-            RadioButton {
-                text: "<font color=\"black\">Sum</font>"
-                checked: true
-                onClicked: {
-                    queryBuilder.query_operation = "SUM";
-                    barCharts.update();
-                    barChartsRbGrpYearChooser.update();
-                }
-            }
-
-            RadioButton {
-                text: "<font color=\"black\">Count</font>"
-                onClicked: {
-                    queryBuilder.query_operation = "COUNT";
-                    barCharts.update();
-                    barChartsRbGrpYearChooser.update();
-                }
-            }
-        }
 
         // Choix d'afficher l'année ou le mois
         Row {
@@ -68,9 +104,8 @@ Window {
                 onClicked: {
                     console.log("*** YEAR MODE SELECTED ***")
                     queryBuilder.query_periode = "%Y";
-                    barChartsCbGrpCategoryChooser.update();
-                    barCharts.update();
-                    barChartsRbGrpYearChooser.update();
+                    chart_widget_updater.full_update()
+
                 }
             }
 
@@ -80,38 +115,22 @@ Window {
                 onClicked: {
                     console.log("*** MONTH MODE SELECTED ***")
                     queryBuilder.query_periode = "%m";
-                    barChartsCbGrpCategoryChooser.update();
-                    barCharts.update();
-                    barChartsRbGrpYearChooser.update();
+                    chart_widget_updater.full_update()
                 }
             }
 
             SpinBox {
                 property bool changedbyUser: true
                 id: barChartsRbGrpYearChooser
-                from: 1950
-                to: 9999
                 visible: barChartsRbGrpPeriodChooserMonthBtn.checked
 
                 onValueChanged:  {
                         console.log("VALUE CHANGED : YEAR CHOOSER")
                         queryBuilder.query_selected_year = barChartsRbGrpYearChooser.value;
                         if(changedbyUser) {
-                            barChartsCbGrpCategoryChooser.update();
-                            barCharts.update();
+                            chart_widget_updater.update_category()
+                            chart_widget_updater.update_chart()
                         }
-                }
-
-                function update() {
-                    console.log("*** UPDATE YEAR CHOOSER ***")
-                    if(barChartsCbGrpCategoryChooser.currentIndex === 0) db.executeQuery("SELECT MAX(strftime('%Y',date)), MIN(strftime('%Y',date)) FROM Depense JOIN Categorie on Categorie.id = Depense.id_categorie");
-                    else db.executeQuery("SELECT MAX(strftime('%Y',date)), MIN(strftime('%Y',date)) FROM Depense JOIN Categorie on Categorie.id = Depense.id_categorie WHERE Categorie.nom = '"+barChartsCbGrpCategoryChooser.currentText+"'");
-                    if(!isNaN(Number(db.queryResult.split("|")[0])) && !isNaN(Number(db.queryResult.split("|")[1]))) {
-                        if(Number(db.queryResult.split("|")[0]) < Number(queryBuilder.query_selected_year)) queryBuilder.query_selected_year = Number(db.queryResult.split("|")[0]);
-                        if(Number(db.queryResult.split("|")[1]) > Number(queryBuilder.query_selected_year)) queryBuilder.query_selected_year = Number(db.queryResult.split("|")[1]);
-                        barChartsRbGrpYearChooser.to = Number(db.queryResult.split("|")[0]);
-                        barChartsRbGrpYearChooser.from = Number(db.queryResult.split("|")[1]);
-                    }
                 }
             }
         }
@@ -130,33 +149,12 @@ Window {
                     barSetElmt.unshift("Tout");
                     model = barSetElmt;
                     barChartsCbGrpCategoryChooser.currentIndex=0;
-                    barChartsRbGrpYearChooser.update();
+                    chart_widget_updater.update_year_chooser()
                 }
 
                 onActivated: {
                     console.log("ACTIVATED : CATEGORY CHOOSER")
-                    barChartsRbGrpYearChooser.changedbyUser = false
-                    barChartsRbGrpYearChooser.update();
-                    barChartsRbGrpYearChooser.changedbyUser = true
-                    barChartsCbGrpCategoryChooser.update();
-                    barCharts.update();
-                }
-
-                function update() {
-                    console.log("*** UPDATE CATEGORY CHOOSER ***")
-                    if(barChartsCbGrpCategoryChooser.currentIndex === 0)
-                        if(barChartsRbGrpPeriodChooserMonthBtn.checked) {
-                            queryBuilder.query_where = "WHERE strftime('%Y',date) = '"+queryBuilder.query_selected_year+"'";
-                        }
-                        else {
-                            queryBuilder.query_where = "";
-                        }
-                    else {
-                        queryBuilder.query_where = "JOIN Categorie on Categorie.id = Depense.id_categorie WHERE Categorie.nom LIKE '"+barChartsCbGrpCategoryChooser.currentText+"'";
-                        if(barChartsRbGrpPeriodChooserMonthBtn.checked) {
-                            queryBuilder.query_where+= " AND strftime('%Y',date) = '"+queryBuilder.query_selected_year+"'";
-                        }
-                    }
+                    chart_widget_updater.full_update()
                 }
             }
         }
@@ -171,9 +169,7 @@ Window {
                 onClicked: {
                     queryBuilder.query_attribute = "prix*quantite"
                     axisY8.labelFormat = "%.2f"
-                    barChartsCbGrpCategoryChooser.update();
-                    barChartsRbGrpYearChooser.update();
-                    barCharts.update();
+                    chart_widget_updater.update_chart()
                 }
             }
 
@@ -182,9 +178,7 @@ Window {
                 onClicked: {
                     queryBuilder.query_attribute = "quantite"
                     axisY8.labelFormat = "%d"
-                    barChartsCbGrpCategoryChooser.update();
-                    barChartsRbGrpYearChooser.update();
-                    barCharts.update();
+                    chart_widget_updater.update_chart()
                 }
             }
         }
@@ -211,7 +205,8 @@ Window {
 
                 Component.onCompleted: {
                     console.log("BAR CHARTS COMPLETED")
-                    barCharts.update();
+                    //barCharts.update();
+                    chart_widget_updater.update_chart()
                 }
             }
 
@@ -219,28 +214,6 @@ Window {
                 id: mySeries
                 axisX: chart_legend
                 axisY: axisY8
-            }
-
-            function update() {
-                console.log("*** UPDATE CHARTS ***")
-                mySeries.clear()
-
-                queryBuilder.buildQuerry();
-                db.executeQuery("SELECT MAX(op) FROM ("+queryBuilder.query_completed+")")
-                axisY8.max = Number(db.queryResult.split("|")[0])+ Number(db.queryResult.split("|")[0])*(0.1)
-                db.executeQuery(queryBuilder.query_completed)
-
-                let newCategories = []
-                let barSetElmt = []
-                newCategories.push(db.queryResult.split("|")[1])
-                barSetElmt.push(db.queryResult.split("|")[0])
-                while(db.nextQuerry()) {
-                    newCategories.push(db.queryResult.split("|")[1])
-                    barSetElmt.push(db.queryResult.split("|")[0])
-                }
-
-                chart_legend.categories = newCategories
-                mySeries.append(queryBuilder.query_operation + " " + queryBuilder.query_attribute, barSetElmt)
             }
         }
 
