@@ -7,8 +7,8 @@ CREATE TABLE `Depense` (
 	`date` DATE NOT NULL DEFAULT CURRENT_DATE,
 	`quantite` INTEGER NOT NULL DEFAULT 1,
 	`prix` INTEGER NOT NULL,
-	`id_liste` VARCHAR(30) NOT NULL DEFAULT 1,
-	`id_categorie` INTEGER,
+	`id_liste` INTEGER NOT NULL DEFAULT 1,
+	`id_categorie` INTEGER NOT NULL DEFAULT 1,
 	`marque` VARCHAR(25),
 	`fournisseur` VARCHAR(50),
 	FOREIGN KEY (`id_categorie`) REFERENCES `Categorie`(`id`)
