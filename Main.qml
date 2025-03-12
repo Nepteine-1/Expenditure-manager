@@ -22,14 +22,12 @@ Window {
         // Permet de passer du menu principale à une liste de dépense
         // Si il n'y a aucune dépense dans la liste donnée alors on masque le graphique (il sera automatiquement affiché à nouveau quand l'utilisateur aura ajouté sa 1ere dépense)
         function getChartPageFromList(list_id) {
-
             main_page.visible = false
             db.executeQuery("SELECT * FROM Depense WHERE id_liste=%1".arg(list_id))
             if(db.queryRowCount===0) chart_page.setChartVisibility(false)
-            queryBuilder.query_list = list_id
+            chart_page.initPage(list_id)
             chart_widget_updater.full_update()
             liste_depense.refresh()
-
             chart_page.visible = true
         }
 
@@ -50,6 +48,22 @@ Window {
     Item {
         id: chart_page
         visible: false
+
+        function initPage(list_choosed) {
+            queryBuilder.query_list = list_choosed
+            queryBuilder.query_operation = "SUM"
+            queryBuilder.query_periode = "%Y"
+            queryBuilder.query_where = "WHERE id_liste="+queryBuilder.query_list
+            queryBuilder.query_selected_year = (function () { db.executeQuery("SELECT MAX(strftime('%Y',date)) FROM Depense WHERE id_liste="+queryBuilder.query_list); return db.queryResult;})()
+            queryBuilder.query_attribute = "prix*quantite"
+            expAddWidget.selected_list = list_choosed
+            expAddWidget.clear()
+            barChartsCbGrpCategoryChooser.currentIndex=0
+            barChartsRbGrpPeriodChooserMonthBtn.checked = false
+            barChartsRbGrpPeriodChooserYearBtn.checked = true
+            barChartsRbGrpAttributeChooserQuantite.checked = false
+            barChartsRbGrpAttributeChooserPrix.checked = true
+        }
 
         function setChartVisibility(value) {
             barChartsRbGrpPeriodChooser.visible=value
@@ -151,6 +165,7 @@ Window {
                 id: barChartsRbGrpPeriodChooser
 
                 RadioButton {
+                    id: barChartsRbGrpPeriodChooserYearBtn
                     text: "<font color=\"black\">Year</font>"
                     checked: true
                     onClicked: {
@@ -195,18 +210,23 @@ Window {
                     model: []
 
                     Component.onCompleted: {
-                        console.log("CATEGORY CHOOSER COMPLETED")
-                        db.executeQuery("SELECT GROUP_CONCAT(nom) FROM Categorie");
-                        let barSetElmt = db.queryResult.split(",");
-                        barSetElmt.unshift("Tout");
-                        barChartsCbGrpCategoryChooser.model = barSetElmt;
-                        barChartsCbGrpCategoryChooser.currentIndex=0;
-                        chart_widget_updater.update_year_chooser()
+                        barChartsCbGrpCategoryChooser.update()
+                        barChartsCbGrpCategoryChooser.currentIndex=0
                     }
 
                     onActivated: {
                         console.log("ACTIVATED : CATEGORY CHOOSER")
                         chart_widget_updater.full_update()
+                    }
+
+                    function update() {
+                        let prev_indx = barChartsCbGrpCategoryChooser.currentIndex
+                        db.executeQuery("SELECT GROUP_CONCAT(nom) FROM Categorie");
+                        let barSetElmt = db.queryResult.split(",");
+                        barSetElmt.unshift("Tout");
+                        barChartsCbGrpCategoryChooser.model = barSetElmt;
+                        barChartsCbGrpCategoryChooser.currentIndex=prev_indx;
+                        chart_widget_updater.update_year_chooser()
                     }
                 }
             }
@@ -216,6 +236,7 @@ Window {
                 id: barChartsRbGrpAttributeChooser
 
                 RadioButton {
+                    id: barChartsRbGrpAttributeChooserPrix
                     text: "<font color=\"black\">Prix</font>"
                     checked: true
                     onClicked: {
@@ -226,6 +247,7 @@ Window {
                 }
 
                 RadioButton {
+                    id: barChartsRbGrpAttributeChooserQuantite
                     text: "<font color=\"black\">Quantite</font>"
                     onClicked: {
                         queryBuilder.query_attribute = "quantite"
@@ -269,131 +291,29 @@ Window {
             }
 
             // Section ajout dépense
-            Text{
-                text: "Ajoutez une dépense"
-            }
-
-            TextField {
-                id: nm_dep
-                placeholderText: "Nom de la dépense"
-                width: 150
-
-            }
-
-            TextField {
-                id: quantite
-                placeholderText: "Quantité"
-                width: 150
-            }
-
-            ComboBox {
-                id: categorie
-                width: 150
-                model: []
-
-                Component.onCompleted: {
-                    db.executeQuery("SELECT GROUP_CONCAT(nom) FROM Categorie");
-                    model = db.queryResult.split(",");
+            AddExpenditureWidget {
+                id: expAddWidget
+                onObjectAdded : {
+                    liste_depense.refresh();
+                    chart_widget_updater.full_update()
+                    chart_page.setChartVisibility(true)
                 }
-            }
 
-            TextField {
-                id: date_dep
-                placeholderText: "Date de la dépense"
-                width: 150
-            }
-
-            TextField {
-                id: marque
-                placeholderText: "Marque"
-                width: 150
-            }
-
-            TextField {
-                id: fournisseur
-                placeholderText: "Fournisseur"
-                width: 150
-            }
-
-            TextField {
-                id: prix
-                placeholderText: "Prix"
-                width: 150
-            }
-
-            Button {
-                text: "Ajouter"
-
-                onClicked: {
-                    if(db.executeQuery("SELECT id FROM Categorie WHERE nom=\"%1\";".arg(categorie.currentText))) {
-                        let category_id = db.queryResult;
-                        if(db.executeQuery("INSERT INTO Depense (nom, quantite, date, id_categorie, marque, fournisseur, prix, id_liste) VALUES (\"%1\", %2, \"%7\", %3, \"%4\", \"%5\", %6, %8);".arg(nm_dep.text).arg(quantite.text).arg(category_id).arg(marque.text).arg(fournisseur.text).arg(prix.text).arg(date_dep.text).arg(queryBuilder.query_list))) {
-                            console.log("New Item added with success");
-                            liste_depense.refresh();
-                            chart_widget_updater.full_update()
-                            chart_page.setChartVisibility(true)
-                        }
-                    }
-                }
+                Component.onCompleted: {expAddWidget.selected_list = query_list}
             }
 
             // Liste des dépenses
-            Text{
-                text: "Toutes les dépenses"
+            ExpenditureList {
+                id:liste_depense
             }
 
-            Rectangle {
-                id: liste_depense
-                clip: true
-                width:400
-                height: 75
-                border.width: 1
-                ListView {
-                    id: liste_depense_view
-                    anchors.fill: parent
-                    boundsBehavior: Flickable.StopAtBounds
-                    model:ListModel { id: listmodel}
-                    delegate: Text { text: res}
+            // Création de catégorie  
+            CreateCategory {
+                id:category_creator
 
-                    Component.onCompleted:  { liste_depense.refresh(); }
-                }
-
-                function refresh() {
-                    listmodel.clear()
-                    if(db.executeQuery("SELECT Depense.nom, Depense.date, Depense.quantite, Depense.prix, Categorie.nom AS categorie, Depense.marque, Depense.fournisseur FROM Depense JOIN Categorie ON Categorie.id = Depense.id_categorie WHERE id_liste=%1 ORDER BY Depense.date;".arg(queryBuilder.query_list))) {
-                        if(db.queryRowCount!==0) {
-                        listmodel.append({"res":db.queryResult})
-                        while(db.nextQuerry()) {
-                            listmodel.append({"res":db.queryResult})
-                        }
-                        liste_depense_view.positionViewAtEnd()
-                        }
-                    }
-                }
-            }
-
-            // Création de catégorie
-            Text{
-                text: "Créer une catégorie"
-            }
-
-            TextField {
-                id: new_cat_dep_name
-                placeholderText: "Nom de la catégorie"
-                width: 150
-            }
-
-            Button {
-                text: "Créer une catégorie"
-
-                onClicked: {
-                    if(new_cat_dep_name.text!=="") {
-                        if(db.executeQuery("INSERT INTO Categorie (nom) VALUES (\"%1\");".arg(new_cat_dep_name.text))) {
-                            categorie.model.push(new_cat_dep_name.text);
-                            barChartsCbGrpCategoryChooser.model.push(new_cat_dep_name.text);
-                            new_cat_dep_name.text = "";
-                        }
-                    }
+                onCategoryAdded: {
+                    expAddWidget.updateCategoryCB()
+                    barChartsCbGrpCategoryChooser.update()
                 }
             }
         }

@@ -22,6 +22,11 @@ qt_add_qml_module(appExpenditure-manager
         QML_FILES
         SOURCES
         SOURCES
+        QML_FILES ExpenditureList.qml
+        QML_FILES
+        QML_FILES AddExpenditureWidget.qml
+        QML_FILES
+        QML_FILES CreateCategory.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
