@@ -24,7 +24,7 @@ Item {
                 model:ListModel { id: listmodel}
                 delegate: Text { text: res}
 
-                Component.onCompleted:  { liste_depense.refresh(); }
+                Component.onCompleted:  { refresh(); }
             }
         }
     }
