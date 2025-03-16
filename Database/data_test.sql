@@ -34,12 +34,19 @@ VALUES
 DROP TABLE IF EXISTS `Liste`;
 CREATE TABLE `Liste` (
 	`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`nom` VARCHAR(50) NOT NULL UNIQUE
+	`nom` VARCHAR(50) NOT NULL UNIQUE,
+	`date_creation` DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
 INSERT INTO `Liste` (`nom`)
 VALUES
-	('DEFAULT');
+	('DEFAULT'),
+	('Ref'),
+	('zfe'),
+	('fez'),
+	('fzefez'),
+	('DEFAfezfULT'),
+	('ver');
 
 INSERT INTO `Depense` (`nom`, `quantite`, `id_categorie`, `date`, `marque`, `fournisseur`, `prix`)
 VALUES
