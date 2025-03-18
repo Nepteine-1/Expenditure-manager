@@ -41,12 +41,28 @@ CREATE TABLE `Liste` (
 INSERT INTO `Liste` (`nom`)
 VALUES
 	('DEFAULT'),
-	('Ref'),
-	('zfe'),
-	('fez'),
-	('fzefez'),
-	('DEFAfezfULT'),
-	('ver');
+	('LIST 1'),
+	('LIST 2'),
+	('LIST 3'),
+	('LIST 4'),
+	('LIST 5'),
+	('LIST 6'),
+	('LIST 7'),
+	('LIST 8'),
+	('LIST 9'),
+	('LIST 10'),
+	('LIST 11'),
+	('LIST 12'),
+	('LIST 13'),
+	('LIST 14'),
+	('LIST 15'),
+	('LIST 16'),
+	('LIST 17'),
+	('LIST 18'),
+	('LIST 19'),
+	('LIST 20'),
+	('LIST 21'),
+	('LIST 22');
 
 INSERT INTO `Depense` (`nom`, `quantite`, `id_categorie`, `date`, `marque`, `fournisseur`, `prix`)
 VALUES

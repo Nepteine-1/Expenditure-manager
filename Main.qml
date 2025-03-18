@@ -7,6 +7,7 @@ import QtCharts 2.15
 import QtTest 1.0
 
 Window {
+    id : container
     width: 640
     height: 480
     visible: true
@@ -20,7 +21,8 @@ Window {
         id: view_handler
 
         // Permet de passer du menu principale à une liste de dépense
-        // Si il n'y a aucune dépense dans la liste donnée alors on masque le graphique (il sera automatiquement affiché à nouveau quand l'utilisateur aura ajouté sa 1ere dépense)
+        // Si il n'y a aucune dépense dans la liste donnée alors on masque le graphique
+        // (il sera automatiquement affiché à nouveau quand l'utilisateur aura ajouté sa 1ere dépense)
         function getChartPageFromList(list_id) {
             main_page.visible = false
             db.executeQuery("SELECT * FROM Depense WHERE id_liste=%1".arg(list_id))
@@ -29,7 +31,7 @@ Window {
             chart_page.visible = true
         }
 
-        // Permet de revenir à la page principale et réaffiche le graphique
+        // Permet de revenir à la page principale
         function getMainMenu() {
             chart_page.setChartVisibility(true)
             chart_page.visible = false
@@ -37,19 +39,19 @@ Window {
         }
     }
 
-    /*                                                  */
-    /*                                                  */
-    /*                   CHART PAGE                     */
-    /*                                                  */
-    /*                                                  */
-
     ChartPage {
         id: chart_page
     }
 
-    // Créer une nouvelle liste ou selectionner une liste de dépense
+    /*
     MainPage {
         id: main_page
+        onListChoosed: (list) => { view_handler.getChartPageFromList(list);}
+    } */
+
+    MainPage {
+        id: main_page
+        anchors.fill: parent
         onListChoosed: (list) => { view_handler.getChartPageFromList(list);}
     }
 }
