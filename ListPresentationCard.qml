@@ -25,14 +25,13 @@ Item {
                 text: root.list_title
                 font.pixelSize: 18
                 font.bold: true
-                font.family: "Roboto"
                 color: "#333333"
             }
 
             Text {
                 id: date_creation
                 text: root.list_date_creation
-                color: "#F5F5F5"
+                color: "black"
             }
         }
 
@@ -44,19 +43,28 @@ Item {
         }
 
         MouseArea {
+            id: mouseArea
             anchors.fill: parent
             hoverEnabled: true
 
             onClicked: {
                 selected(root.list_title)
             }
+        }
 
-            onEntered: {
-                content.border.width=2
+        states: State {
+            name: "down"; when: mouseArea.containsMouse === true
+            PropertyChanges {
+                content {
+                    color: "gainsboro"
+                }
             }
+        }
 
-            onExited: {
-                content.border.width=1
+        transitions: Transition {
+            from: "down"; to: "";
+            ParallelAnimation {
+                ColorAnimation { duration: 250 }
             }
         }
     }
