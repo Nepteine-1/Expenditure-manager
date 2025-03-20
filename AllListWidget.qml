@@ -71,16 +71,4 @@ Item {
             gridView.width = column_num*gridView.cellWidth
         }
     }
-
-    /*Button {
-        width: gridView.width
-        height: 50
-        text: "Ajouter une liste"
-        anchors.top: gridView.bottom
-        anchors.horizontalCenter: gridView.horizontalCenter
-
-        onClicked: {
-            console.log("")
-        }
-    }*/
 }
