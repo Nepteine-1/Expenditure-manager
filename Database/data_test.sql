@@ -1,5 +1,7 @@
+-------- PRAGMA ------------------------------------
 PRAGMA foreign_keys = ON;
 
+-------- TABLES ------------------------------------
 DROP TABLE IF EXISTS `Depense`;
 CREATE TABLE `Depense` (
 	`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -19,7 +21,37 @@ CREATE TABLE `Categorie` (
 	`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`nom` VARCHAR(50) NOT NULL UNIQUE
 );
+	
+DROP TABLE IF EXISTS `Liste`;
+CREATE TABLE `Liste` (
+	`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`nom` VARCHAR(50) NOT NULL UNIQUE,
+	`date_creation` DATE NOT NULL DEFAULT CURRENT_DATE,
+	`nb_elements` INTEGER NOT NULL DEFAULT 0
+);
 
+-------- TRIGGERS ----------------------------------
+DROP TRIGGER IF EXISTS `new_depense_added`;
+CREATE TRIGGER `new_depense_added` 
+AFTER INSERT ON `Depense`
+FOR EACH ROW
+BEGIN
+	UPDATE `Liste`
+	SET `nb_elements` = `nb_elements`+1 
+	WHERE `id` = NEW.`id_liste`;
+END;
+
+DROP TRIGGER IF EXISTS `depense_deleted`;
+CREATE TRIGGER `depense_deleted`
+AFTER DELETE ON `Depense`
+FOR EACH ROW
+BEGIN
+	UPDATE Liste 
+	SET nb_elements = nb_elements-1 
+	WHERE id = OLD.id_liste;
+END;
+
+-------- INSERT VALUES -----------------------------
 INSERT INTO `Categorie` (`nom`)
 VALUES
 	('Nourriture'),
@@ -30,13 +62,6 @@ VALUES
 	('Assurance'),
 	('Immobilier'),
 	('Mutuelle');
-	
-DROP TABLE IF EXISTS `Liste`;
-CREATE TABLE `Liste` (
-	`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`nom` VARCHAR(50) NOT NULL UNIQUE,
-	`date_creation` DATE NOT NULL DEFAULT CURRENT_DATE
-);
 
 INSERT INTO `Liste` (`nom`)
 VALUES
@@ -63,6 +88,8 @@ VALUES
 	('LIST 20'),
 	('LIST 21'),
 	('LIST 22');
+
+
 
 INSERT INTO `Depense` (`nom`, `quantite`, `id_categorie`, `date`, `marque`, `fournisseur`, `prix`)
 VALUES

@@ -38,6 +38,7 @@ Item {
                     id: card
                     list_title: model.nom
                     list_date_creation: model.datetime
+                    list_number_element: model.nb_elmt
 
                     width: cellSize[0]
                     height: cellSize[1]
@@ -54,11 +55,11 @@ Item {
 
             function update() {
                 listmodel.clear()
-                if(db.executeQuery("SELECT nom, date_creation FROM Liste")) {
+                if(db.executeQuery("SELECT nom, date_creation, nb_elements FROM Liste")) {
                     if(db.queryRowCount!==0) {
-                        listmodel.append({"nom":db.queryResult.split("|")[0], "datetime":db.queryResult.split("|")[1]})
+                        listmodel.append({"nom":db.queryResult.split("|")[0], "datetime":db.queryResult.split("|")[1], "nb_elmt":db.queryResult.split("|")[2]})
                         while(db.nextQuerry()) {
-                            listmodel.append({"nom":db.queryResult.split("|")[0], "datetime":db.queryResult.split("|")[1]})
+                            listmodel.append({"nom":db.queryResult.split("|")[0], "datetime":db.queryResult.split("|")[1], "nb_elmt":db.queryResult.split("|")[2]})
                         }
 
                     }
