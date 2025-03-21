@@ -34,6 +34,7 @@ Window {
         // Permet de revenir à la page principale
         function getMainMenu() {
             chart_page.setChartVisibility(true)
+            main_page.update_list()
             chart_page.visible = false
             main_page.visible = true
         }

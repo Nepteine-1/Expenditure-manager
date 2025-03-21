@@ -14,6 +14,7 @@ CREATE TABLE `Depense` (
 	`marque` VARCHAR(25),
 	`fournisseur` VARCHAR(50),
 	FOREIGN KEY (`id_categorie`) REFERENCES `Categorie`(`id`)
+	FOREIGN KEY (`id_liste`) REFERENCES `Liste`(`id`) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `Categorie`;

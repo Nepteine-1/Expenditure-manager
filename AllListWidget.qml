@@ -72,4 +72,8 @@ Item {
             gridView.width = column_num*gridView.cellWidth
         }
     }
+
+    function update_list_view() {
+        gridView.update();
+    }
 }

@@ -42,10 +42,15 @@ Item {
         }
 
         AllListWidget {
+            id: lists
             width:  root.width - panelWidth
             height: parent.height
 
             onListClicked: (list) => { listChoosed(list) }
         }
+    }
+
+    function update_list() {
+        lists.update_list_view()
     }
 }
