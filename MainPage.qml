@@ -30,7 +30,8 @@ Item {
 
             ComboBox {
                 id: sort_type
-                model: ["Aucun filtre", "Nom ASC", "Nom DESC", "Date de modification", "Nombre d'éléments", "Date de création"]
+                width: 150
+                model: ["Aucun filtre", "Nom ASC", "Nom DESC", "Nombre d'éléments", "Date de modification", "Date de création"]
                 onActivated: {
                     lists.update_list_view(search_bar.text, sort_type.currentIndex)
                 }

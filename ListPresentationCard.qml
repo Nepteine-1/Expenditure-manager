@@ -4,6 +4,7 @@ Item {
     id: root
     property string list_title : "Titre"
     property string list_date_creation : new Date();
+    property string list_last_modif : new Date();
     property int list_number_element : 0;
 
     width: 250
@@ -30,7 +31,13 @@ Item {
 
             Text {
                 id: date_creation
-                text: root.list_date_creation
+                text: "Créé le "+root.list_date_creation
+                color: "black"
+            }
+
+            Text {
+                id: date_last_modif
+                text: "Modifié le "+root.list_last_modif
                 color: "black"
             }
         }

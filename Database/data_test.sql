@@ -28,6 +28,7 @@ CREATE TABLE `Liste` (
 	`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`nom` VARCHAR(50) NOT NULL UNIQUE,
 	`date_creation` DATE NOT NULL DEFAULT CURRENT_DATE,
+	`date_last_modif` DATE NOT NULL DEFAULT CURRENT_DATE,
 	`nb_elements` INTEGER NOT NULL DEFAULT 0
 );
 
@@ -38,7 +39,8 @@ AFTER INSERT ON `Depense`
 FOR EACH ROW
 BEGIN
 	UPDATE `Liste`
-	SET `nb_elements` = `nb_elements`+1 
+	SET `nb_elements` = `nb_elements`+1,
+		`date_last_modif` = CURRENT_DATE
 	WHERE `id` = NEW.`id_liste`;
 END;
 
@@ -47,9 +49,20 @@ CREATE TRIGGER `depense_deleted`
 AFTER DELETE ON `Depense`
 FOR EACH ROW
 BEGIN
-	UPDATE Liste 
-	SET nb_elements = nb_elements-1 
-	WHERE id = OLD.id_liste;
+	UPDATE `Liste` 	
+	SET `nb_elements` = `nb_elements`-1,
+		`date_last_modif` = CURRENT_DATE
+	WHERE `id` = OLD.`id_liste`;
+END;
+
+DROP TRIGGER IF EXISTS `depense_updated`;
+CREATE TRIGGER `depense_updated`
+AFTER UPDATE ON `Depense`
+FOR EACH ROW
+BEGIN
+	UPDATE `Liste`
+	SET `date_last_modif` = CURRENT_DATE
+	WHERE `id` = OLD.`id_liste`;
 END;
 
 -------- INSERT VALUES -----------------------------
@@ -64,33 +77,31 @@ VALUES
 	('Immobilier'),
 	('Mutuelle');
 
-INSERT INTO `Liste` (`nom`)
+INSERT INTO `Liste` (`nom`,`date_creation`, `date_last_modif`)
 VALUES
-	('DEFAULT'),
-	('LIST 1'),
-	('LIST 2'),
-	('LIST 3'),
-	('LIST 4'),
-	('LIST 5'),
-	('LIST 6'),
-	('LIST 7'),
-	('LIST 8'),
-	('LIST 9'),
-	('LIST 10'),
-	('LIST 11'),
-	('LIST 12'),
-	('LIST 13'),
-	('LIST 14'),
-	('LIST 15'),
-	('LIST 16'),
-	('LIST 17'),
-	('LIST 18'),
-	('LIST 19'),
-	('LIST 20'),
-	('LIST 21'),
-	('LIST 22');
-
-
+	('DEFAULT', '2024-05-06', '2024-12-06'),
+	('LIST 1', '2024-05-06', '2024-12-06'),
+	('LIST 2', '2024-05-06', '2024-12-06'),
+	('LIST 3', '2024-05-06', '2024-12-06'),
+	('LIST 4', '2024-05-06', '2024-12-06'),
+	('LIST 5', '2024-05-06', '2024-12-06'),
+	('LIST 6', '2024-05-06', '2024-12-06'),
+	('LIST 7', '2024-05-06', '2024-12-06'),
+	('LIST 8', '2024-05-06', '2024-12-06'),
+	('LIST 9', '2024-05-06', '2024-12-06'),
+	('LIST 10', '2024-05-06', '2024-12-06'),
+	('LIST 11', '2024-05-06', '2024-12-06'),
+	('LIST 12', '2024-05-06', '2024-12-06'),
+	('LIST 13', '2024-05-06', '2024-12-06'),
+	('LIST 14', '2024-05-06', '2024-12-06'),
+	('LIST 15', '2024-05-06', '2024-12-06'),
+	('LIST 16', '2024-05-06', '2024-12-06'),
+	('LIST 17', '2024-05-06', '2024-12-06'),
+	('LIST 18', '2024-05-06', '2024-12-06'),
+	('LIST 19', '2024-05-06', '2024-12-06'),
+	('LIST 20', '2024-05-06', '2024-12-06'),
+	('LIST 21', '2024-05-06', '2024-12-06'),
+	('LIST 22', '2024-05-06', '2024-12-06');
 
 INSERT INTO `Depense` (`nom`, `quantite`, `id_categorie`, `date`, `marque`, `fournisseur`, `prix`)
 VALUES

@@ -38,6 +38,7 @@ Item {
                     id: card
                     list_title: model.nom
                     list_date_creation: model.datetime
+                    list_last_modif: model.last_modif
                     list_number_element: model.nb_elmt
 
                     width: cellSize[0]
@@ -55,7 +56,7 @@ Item {
 
             function update(list_research_token = null, sort_by = null) {
                 listmodel.clear()
-                let query_to_execute = "SELECT nom, date_creation, nb_elements FROM Liste"
+                let query_to_execute = "SELECT nom, date_creation, nb_elements, date_last_modif FROM Liste"
                 if(list_research_token!== null && list_research_token.length!==0) {
                     query_to_execute+=" WHERE nom LIKE \""+list_research_token+"%\""
                 }
@@ -71,20 +72,25 @@ Item {
                             break;
 
                         case 3:
-                            query_to_execute+="date_creation\""
+                            query_to_execute+="nb_elements\" DESC"
+
                             break;
 
                         case 4:
-                            query_to_execute+="nb_elements\" DESC"
+                            query_to_execute+="date_last_modif\" DESC"
+                            break;
+
+                        case 5:
+                            query_to_execute+="date_creation\" DESC"
                             break;
                     }
                 }
 
                 if(db.executeQuery(query_to_execute)) {
                     if(db.queryRowCount!==0) {
-                        listmodel.append({"nom":db.queryResult.split("|")[0], "datetime":db.queryResult.split("|")[1], "nb_elmt":db.queryResult.split("|")[2]})
+                        listmodel.append({"nom":db.queryResult.split("|")[0], "datetime":db.queryResult.split("|")[1], "nb_elmt":db.queryResult.split("|")[2], "last_modif":db.queryResult.split("|")[3]})
                         while(db.nextQuerry()) {
-                            listmodel.append({"nom":db.queryResult.split("|")[0], "datetime":db.queryResult.split("|")[1], "nb_elmt":db.queryResult.split("|")[2]})
+                            listmodel.append({"nom":db.queryResult.split("|")[0], "datetime":db.queryResult.split("|")[1], "nb_elmt":db.queryResult.split("|")[2], "last_modif":db.queryResult.split("|")[3]})
                         }
 
                     }
