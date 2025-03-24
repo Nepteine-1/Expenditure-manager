@@ -5,46 +5,38 @@ import QtQuick.Layouts
 Item {
     id:root
 
-    property int panelWidth: 250
-
     signal listChoosed(list: string)
 
-    Row {
+    Column{
         anchors.fill: parent
-        Rectangle {
-            color : "coral"
-            width:  panelWidth
-            height: parent.height
+        Row {
+            Button {
+                text: "Nouvelle liste"
+            }
 
-            ColumnLayout {
-                Rectangle {
-                    width: parent.width
-                    height: 50
-                    color: "orange"
-                    Text {
-                        text : "Créer une liste"
-                        font.pixelSize: 22
-                        font.bold: true
-                    }
-                }
+            TextField {
+                id: search_bar
+                text: ""
+                placeholderText: "Rechercher.."
 
-                Rectangle {
-                    width: parent.width
-                    height: 50
-                    color: "orange"
-                    Text {
-                        text : "Créer une liste"
-                        font.pixelSize: 22
-                        font.bold: true
-                    }
+                onTextChanged: {
+                    lists.update_list_view(search_bar.text)
                 }
+            }
+
+            Text  {
+                text: "Trier par "
+            }
+
+            ComboBox {
+                model: ["Nom", "Date de modification", "Nombre d'éléments", "Date de création"]
             }
         }
 
         AllListWidget {
             id: lists
-            width:  root.width - panelWidth
-            height: parent.height
+            width:  root.width
+            height: 500
 
             onListClicked: (list) => { listChoosed(list) }
         }

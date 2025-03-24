@@ -44,12 +44,6 @@ Window {
         id: chart_page
     }
 
-    /*
-    MainPage {
-        id: main_page
-        onListChoosed: (list) => { view_handler.getChartPageFromList(list);}
-    } */
-
     MainPage {
         id: main_page
         anchors.fill: parent

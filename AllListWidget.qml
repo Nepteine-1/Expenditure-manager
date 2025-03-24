@@ -6,7 +6,7 @@ Item {
     width: parent.width
     height: parent.height
 
-    property double sideMargin: 0.15
+    property double sideMargin: 0.05
     property int spacing: 20
     property var cellSize: [250,100]
 
@@ -53,9 +53,15 @@ Item {
 
             Component.onCompleted:  { gridView.update(); }
 
-            function update() {
+            function update(list_research_token = null, sort_by = null) {
                 listmodel.clear()
-                if(db.executeQuery("SELECT nom, date_creation, nb_elements FROM Liste")) {
+                let query_to_execute = "SELECT nom, date_creation, nb_elements FROM Liste"
+                if(list_research_token!== null && list_research_token.length!==0) {
+                    console.log(typeof list_research_token + " "+list_research_token.length)
+                    query_to_execute+=" WHERE nom LIKE \""+list_research_token+"%\""
+                }
+
+                if(db.executeQuery(query_to_execute)) {
                     if(db.queryRowCount!==0) {
                         listmodel.append({"nom":db.queryResult.split("|")[0], "datetime":db.queryResult.split("|")[1], "nb_elmt":db.queryResult.split("|")[2]})
                         while(db.nextQuerry()) {
@@ -73,7 +79,7 @@ Item {
         }
     }
 
-    function update_list_view() {
-        gridView.update();
+    function update_list_view(list_research_token = null, sort_by = null) {
+        gridView.update(list_research_token, sort_by);
     }
 }
