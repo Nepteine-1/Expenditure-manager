@@ -57,8 +57,27 @@ Item {
                 listmodel.clear()
                 let query_to_execute = "SELECT nom, date_creation, nb_elements FROM Liste"
                 if(list_research_token!== null && list_research_token.length!==0) {
-                    console.log(typeof list_research_token + " "+list_research_token.length)
                     query_to_execute+=" WHERE nom LIKE \""+list_research_token+"%\""
+                }
+                if(sort_by!== null && typeof sort_by === "number" && sort_by !==0) {
+                    query_to_execute+=" ORDER BY \""
+                    switch(sort_by) {
+                        case 1:
+                            query_to_execute+="nom\""
+                            break;
+
+                        case 2:
+                            query_to_execute+="nom\" DESC"
+                            break;
+
+                        case 3:
+                            query_to_execute+="date_creation\""
+                            break;
+
+                        case 4:
+                            query_to_execute+="nb_elements\" DESC"
+                            break;
+                    }
                 }
 
                 if(db.executeQuery(query_to_execute)) {

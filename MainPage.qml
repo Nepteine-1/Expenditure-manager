@@ -20,7 +20,7 @@ Item {
                 placeholderText: "Rechercher.."
 
                 onTextChanged: {
-                    lists.update_list_view(search_bar.text)
+                    lists.update_list_view(search_bar.text, sort_type.currentIndex)
                 }
             }
 
@@ -29,7 +29,11 @@ Item {
             }
 
             ComboBox {
-                model: ["Nom", "Date de modification", "Nombre d'éléments", "Date de création"]
+                id: sort_type
+                model: ["Aucun filtre", "Nom ASC", "Nom DESC", "Date de modification", "Nombre d'éléments", "Date de création"]
+                onActivated: {
+                    lists.update_list_view(search_bar.text, sort_type.currentIndex)
+                }
             }
         }
 
