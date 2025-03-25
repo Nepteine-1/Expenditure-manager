@@ -11,7 +11,10 @@ Item {
         anchors.fill: parent
         Row {
             Button {
+                width: 250
+                id:add_button
                 text: "Nouvelle liste"
+                onClicked: addItemDialog.open()
             }
 
             TextField {
@@ -30,7 +33,7 @@ Item {
 
             ComboBox {
                 id: sort_type
-                width: 150
+                width: 200
                 model: ["Aucun filtre", "Nom ASC", "Nom DESC", "Nombre d'éléments", "Date de modification", "Date de création"]
                 onActivated: {
                     lists.update_list_view(search_bar.text, sort_type.currentIndex)
@@ -38,12 +41,46 @@ Item {
             }
         }
 
-        AllListWidget {
-            id: lists
-            width:  root.width
+        Rectangle {
+            id: lists_container
+            width: root.width
             height: 500
+            clip: true
 
-            onListClicked: (list) => { listChoosed(list) }
+            AllListWidget {
+                id: lists
+                anchors.fill: parent
+
+                onListClicked: (list) => { listChoosed(list) }
+            }
+        }
+    }
+
+    Dialog {
+        id: addItemDialog
+        title: "Ajouter un élément"
+        modal: false
+        width: add_button.width
+        x: add_button.x
+        y: add_button.y + add_button.height
+
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        contentItem: Column {
+            TextField {
+                id: itemNameField
+                placeholderText: "Nom de l'élément"
+            }
+        }
+
+        onAccepted: {
+            db.executeQuery("INSERT INTO Liste(`nom`) VALUES('"+itemNameField.text+"')")
+            itemNameField.text = ""
+            lists.update_list_view(search_bar.text, sort_type.currentIndex)
+        }
+
+        onRejected: {
+            itemNameField.text = ""
         }
     }
 

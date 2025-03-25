@@ -6,7 +6,7 @@ Item {
     width: parent.width
     height: parent.height
 
-    property double sideMargin: 0.05
+    property double sideMargin: 0.00
     property int spacing: 20
     property var cellSize: [250,100]
 
@@ -20,7 +20,6 @@ Item {
 
         GridView {
             id: gridView
-            anchors.centerIn: parent
 
             width: parent.width * (1-sideMargin)
             height: parent.height
