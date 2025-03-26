@@ -49,4 +49,8 @@ Window {
         anchors.fill: parent
         onListChoosed: (list) => { view_handler.getChartPageFromList(list);}
     }
+
+    MessageDisplayer {
+        id:msgDisplayer
+    }
 }

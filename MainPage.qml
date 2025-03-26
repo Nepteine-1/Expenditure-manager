@@ -44,7 +44,7 @@ Item {
         Rectangle {
             id: lists_container
             width: root.width
-            height: 500
+            height: 600
             clip: true
 
             AllListWidget {
@@ -75,6 +75,7 @@ Item {
 
         onAccepted: {
             db.executeQuery("INSERT INTO Liste(`nom`) VALUES('"+itemNameField.text+"')")
+            msgDisplayer.setMessage("Liste de dépense <b>"+itemNameField.text+"</b> ajoutée")
             itemNameField.text = ""
             lists.update_list_view(search_bar.text, sort_type.currentIndex)
         }
