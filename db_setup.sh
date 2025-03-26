@@ -1,1 +1,1 @@
-sqlite3 Database/database.db < Database/data_test.sql
+sqlite3 Database/database < Database/data_test.sql
