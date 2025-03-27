@@ -74,10 +74,13 @@ Item {
         }
 
         onAccepted: {
-            db.executeQuery("INSERT INTO Liste(`nom`) VALUES('"+itemNameField.text+"')")
-            msgDisplayer.setMessage("Liste de dépense <b>"+itemNameField.text+"</b> ajoutée")
-            itemNameField.text = ""
-            lists.update_list_view(search_bar.text, sort_type.currentIndex)
+            if(db.executeQuery("INSERT INTO Liste(`nom`) VALUES('"+itemNameField.text+"')")) {
+                msgDisplayer.setMessage("Liste de dépense <b>"+itemNameField.text+"</b> ajoutée")
+                itemNameField.text = ""
+                lists.update_list_view(search_bar.text, sort_type.currentIndex)
+            } else {
+                msgDisplayer.setMessage("Erreur : la liste <b>"+itemNameField.text+"</b> n'a pas pu être ajoutée")
+            }
         }
 
         onRejected: {

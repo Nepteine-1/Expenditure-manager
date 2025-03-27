@@ -25,7 +25,8 @@ Item {
     function setMessage(msg) {
         message.text=msg
         root.opacity=1
-        timer.running=true
+        if(timer.running===true) timer.restart()
+        else timer.running=true
     }
 
     Timer {
