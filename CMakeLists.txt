@@ -4,6 +4,9 @@ project(Expenditure-manager VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Uncomment the following line to enable test_build with google_test
+# add_compile_definitions(TEST_BUILD)
+
 find_package(Qt6 REQUIRED COMPONENTS Quick Sql Widgets)
 
 include_directories(${PROJECT_SOURCE_DIR}/dev/include)
@@ -29,6 +32,7 @@ qt_add_qml_module(appExpenditure-manager
     QML_FILES qml/MainPage.qml
     QML_FILES qml/MessageDisplayer.qml
     QML_FILES qml/Temp.qml
+    SOURCES test/test_custom_db.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
