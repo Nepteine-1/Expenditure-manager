@@ -35,6 +35,7 @@ private:
     QSqlQuery* query { nullptr };
     int queryRowCount{ 0 }; // Should be deprecated with orther SGDB than sqlite
     int numQueryDone{ 0 };
+    QSqlDatabase db;
 };
 
 #endif // CUSTOM_DB_H

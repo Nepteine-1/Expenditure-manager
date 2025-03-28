@@ -1,7 +1,6 @@
 #include <custom_db.h>
 
-CustomDB::CustomDB(QObject *parent) : QObject(parent) {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+CustomDB::CustomDB(QObject *parent) : QObject(parent), db(QSqlDatabase::addDatabase("QSQLITE")){
     db.setHostName("localhost");
     db.setDatabaseName("./../../database/database");
     db.setUserName("username");
@@ -56,4 +55,8 @@ int CustomDB::getQueryColumnCount() { return query->record().count(); }
 int CustomDB::getQueryRowCount() { return queryRowCount; }
 int CustomDB::getNumQueryDone() { return numQueryDone; }
 
-CustomDB::~CustomDB() { if(query!=nullptr) delete query; }
+CustomDB::~CustomDB() {
+    if(query!=nullptr) delete query;
+    db.close();
+    qDebug() << "close";
+}
