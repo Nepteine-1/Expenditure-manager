@@ -6,28 +6,29 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick Sql Widgets)
 
+include_directories(${PROJECT_SOURCE_DIR}/dev/include)
 include_directories(${PROJECT_SOURCE_DIR}/lib/googletest-1.15.2/include)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appExpenditure-manager
-    main.cpp
+	dev/src/main.cpp
 )
 
 qt_add_qml_module(appExpenditure-manager
     URI Expenditure-manager
     VERSION 1.0
-    QML_FILES Main.qml
-    SOURCES custom_db.h custom_db.cpp
-    QML_FILES Temp.qml
-    QML_FILES ExpenditureList.qml
-    QML_FILES AddExpenditureWidget.qml
-    QML_FILES CreateCategory.qml
-    QML_FILES MainPage.qml
-    QML_FILES ChartPage.qml
-    QML_FILES AllListWidget.qml
-    QML_FILES ListPresentationCard.qml
-    QML_FILES MessageDisplayer.qml
+    QML_FILES qml/Main.qml
+    SOURCES dev/include/custom_db.h dev/src/custom_db.cpp
+    QML_FILES qml/AddExpenditureWidget.qml
+    QML_FILES qml/AllListWidget.qml
+    QML_FILES qml/ChartPage.qml
+    QML_FILES qml/CreateCategory.qml
+    QML_FILES qml/ExpenditureList.qml
+    QML_FILES qml/ListPresentationCard.qml
+    QML_FILES qml/MainPage.qml
+    QML_FILES qml/MessageDisplayer.qml
+    QML_FILES qml/Temp.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

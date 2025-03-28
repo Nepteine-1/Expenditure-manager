@@ -3,7 +3,7 @@
 CustomDB::CustomDB(QObject *parent) : QObject(parent) {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setHostName("localhost");
-    db.setDatabaseName("./../../Database/database");
+    db.setDatabaseName("./../../database/database");
     db.setUserName("username");
     db.setPassword("password");
     if (!db.open()) {
