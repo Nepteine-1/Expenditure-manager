@@ -1,4 +1,5 @@
 # Expenditure Manager
+    Developed with QtCreator 16.0.0 and Qt 6.8.2
 
 ## Necessary dependencies
     - Sqlite3 (apt package: sqlite3)
