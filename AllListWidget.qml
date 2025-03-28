@@ -20,7 +20,7 @@ Item {
 
         GridView {
             id: gridView
-
+            boundsBehavior: Flickable.StopAtBounds
             width: parent.width * (1-sideMargin)
             height: parent.height
 

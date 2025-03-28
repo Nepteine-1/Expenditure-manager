@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick Sql Widgets)
 
+include_directories(${PROJECT_SOURCE_DIR}/lib/googletest-1.15.2/include)
+
 qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appExpenditure-manager
@@ -15,23 +17,17 @@ qt_add_executable(appExpenditure-manager
 qt_add_qml_module(appExpenditure-manager
     URI Expenditure-manager
     VERSION 1.0
-    QML_FILES
-        Main.qml
-        SOURCES custom_db.h custom_db.cpp
-        QML_FILES Temp.qml
-        QML_FILES
-        SOURCES
-        SOURCES
-        QML_FILES ExpenditureList.qml
-        QML_FILES
-        QML_FILES AddExpenditureWidget.qml
-        QML_FILES
-        QML_FILES CreateCategory.qml
-        QML_FILES MainPage.qml
-        QML_FILES ChartPage.qml
-        QML_FILES AllListWidget.qml
-        QML_FILES ListPresentationCard.qml
-        QML_FILES MessageDisplayer.qml
+    QML_FILES Main.qml
+    SOURCES custom_db.h custom_db.cpp
+    QML_FILES Temp.qml
+    QML_FILES ExpenditureList.qml
+    QML_FILES AddExpenditureWidget.qml
+    QML_FILES CreateCategory.qml
+    QML_FILES MainPage.qml
+    QML_FILES ChartPage.qml
+    QML_FILES AllListWidget.qml
+    QML_FILES ListPresentationCard.qml
+    QML_FILES MessageDisplayer.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -47,6 +43,10 @@ set_target_properties(appExpenditure-manager PROPERTIES
 
 target_link_libraries(appExpenditure-manager
     PRIVATE Qt6::Quick Qt6::Sql Qt6::Widgets
+    ${PROJECT_SOURCE_DIR}/lib/googletest-1.15.2/lib/libgmock.a
+    ${PROJECT_SOURCE_DIR}/lib/googletest-1.15.2/lib/libgmock_main.a
+    ${PROJECT_SOURCE_DIR}/lib/googletest-1.15.2/lib/libgtest.a
+    ${PROJECT_SOURCE_DIR}/lib/googletest-1.15.2/lib/libgtest_main.a
 )
 
 include(GNUInstallDirs)

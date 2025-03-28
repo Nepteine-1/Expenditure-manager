@@ -3,7 +3,7 @@ import QtQuick
 Item {
     id:root
     opacity: 0
-    width:  container.width * 0.7
+    width:  Math.min(message.width + 40, parent.width)
     height: 100
     anchors.bottom: parent.bottom
     anchors.horizontalCenter: parent.horizontalCenter

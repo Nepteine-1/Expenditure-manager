@@ -11,25 +11,30 @@ CREATE TABLE `Depense` (
 	`prix` INTEGER NOT NULL,
 	`id_liste` INTEGER NOT NULL DEFAULT 1,
 	`id_categorie` INTEGER NOT NULL DEFAULT 1,
-	`marque` VARCHAR(25),
-	`fournisseur` VARCHAR(50),
+	`marque` VARCHAR(100),
+	`fournisseur` VARCHAR(100),
 	FOREIGN KEY (`id_categorie`) REFERENCES `Categorie`(`id`)
 	FOREIGN KEY (`id_liste`) REFERENCES `Liste`(`id`) ON DELETE CASCADE
+	CHECK (length(`nom`)<=50)
+	CHECK (length(`marque`)<=100)
+	CHECK (length(`fournisseur`)<=100)
 );
 
 DROP TABLE IF EXISTS `Categorie`;
 CREATE TABLE `Categorie` (
 	`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`nom` VARCHAR(50) NOT NULL UNIQUE
+	`nom` VARCHAR(50) NOT NULL UNIQUE,
+	 CHECK (length(`nom`)<=50)
 );
 	
 DROP TABLE IF EXISTS `Liste`;
 CREATE TABLE `Liste` (
 	`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`nom` VARCHAR(50) NOT NULL UNIQUE,
+	`nom` VARCHAR(25) NOT NULL UNIQUE,
 	`date_creation` DATE NOT NULL DEFAULT CURRENT_DATE,
 	`date_last_modif` DATE NOT NULL DEFAULT CURRENT_DATE,
-	`nb_elements` INTEGER NOT NULL DEFAULT 0
+	`nb_elements` INTEGER NOT NULL DEFAULT 0,
+	CHECK (length(`nom`)<=25)
 );
 
 -------- TRIGGERS ----------------------------------

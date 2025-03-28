@@ -23,6 +23,8 @@ Item {
         Column {
             Text {
                 id: title
+                clip: true
+                width: content.width
                 text: root.list_title
                 font.pixelSize: 18
                 font.bold: true
