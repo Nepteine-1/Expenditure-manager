@@ -58,5 +58,4 @@ int CustomDB::getNumQueryDone() { return numQueryDone; }
 CustomDB::~CustomDB() {
     if(query!=nullptr) delete query;
     db.close();
-    qDebug() << "close";
 }
