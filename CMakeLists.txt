@@ -31,7 +31,6 @@ qt_add_qml_module(appExpenditure-manager
     QML_FILES qml/ListPresentationCard.qml
     QML_FILES qml/MainPage.qml
     QML_FILES qml/MessageDisplayer.qml
-    QML_FILES qml/Temp.qml
     SOURCES test/test_custom_db.cpp
 )
 
