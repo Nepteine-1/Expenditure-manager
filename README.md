@@ -8,4 +8,5 @@ Developed with QtCreator 16.0.0 and Qt 6.8.2
 
 ## Before launching the app
 
-Execute the bash script "db_setup.sh"
+Execute the bash script "db_setup.sh".
+Currently, QtCreator is necessary to build the app.
