@@ -96,6 +96,39 @@ Item {
         }
     }
 
+    Dialog {
+        anchors.centerIn: parent
+
+        id: deleteListDialog
+        property string list_name:"";
+        property string nb_elmt:"";
+
+        Label {
+            id:lbl
+        }
+
+        onOpened: {
+            switch(nb_elmt) {
+                case "0":
+                    lbl.text = "Aucune dépense ne va être supprimée."
+                    break;
+
+                case "1":
+                    lbl.text = "%1 dépense va être supprimée.".arg(nb_elmt)
+                    break;
+
+                default:
+                    lbl.text = "%1 dépenses vont être supprimées.".arg(nb_elmt)
+            }
+        }
+
+        modal: true
+        visible: false
+        standardButtons: Dialog.Yes | Dialog.Cancel
+
+        onAccepted: lists.delete_list(list_name)
+    }
+
     function update_list() {
         lists.update_list_view()
     }

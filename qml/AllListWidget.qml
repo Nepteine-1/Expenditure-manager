@@ -45,9 +45,10 @@ Item {
                 }
 
                 onDeleted: {
-                    db.executeQuery("DELETE FROM Liste WHERE nom LIKE \"%1\"".arg(model.nom))
-                    msgDisplayer.setMessage("La liste \"%1\" a été supprimée".arg(model.nom))
-                    gridView.update();
+                    deleteListDialog.list_name = model.nom
+                    deleteListDialog.nb_elmt = model.nb_elmt
+                    deleteListDialog.title="Êtes-vous sûr(e) de vouloir supprimer la liste \"%1\" ?".arg(model.nom)
+                    deleteListDialog.open()
                 }
             }
         }
@@ -100,5 +101,11 @@ Item {
 
     function update_list_view(list_research_token = null, sort_by = null) {
         gridView.update(list_research_token, sort_by);
+    }
+
+    function delete_list(list_name) {
+        db.executeQuery("DELETE FROM Liste WHERE nom LIKE \"%1\"".arg(list_name))
+        msgDisplayer.setMessage("La liste <b>\"%1\"</b> a été supprimée".arg(list_name))
+        gridView.update();
     }
 }
