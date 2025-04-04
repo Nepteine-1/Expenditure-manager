@@ -43,6 +43,12 @@ Item {
                     db.executeQuery("SELECT id FROM Liste WHERE nom LIKE \"%1\"".arg(model.nom))
                     listChoosed(db.queryResult)
                 }
+
+                onDeleted: {
+                    db.executeQuery("DELETE FROM Liste WHERE nom LIKE \"%1\"".arg(model.nom))
+                    msgDisplayer.setMessage("La liste \"%1\" a été supprimée".arg(model.nom))
+                    gridView.update();
+                }
             }
         }
 

@@ -12,6 +12,7 @@ Item {
     height: 100
 
     signal selected(list_title: string)
+    signal deleted(list_title: string)
 
     Rectangle {
         id: content
@@ -77,7 +78,7 @@ Item {
             anchors.top: support.top
             anchors.right: support.right
 
-            onClicked: console.log("test")
+            onClicked: deleted(root.list_title)
         }
 
         states: State {

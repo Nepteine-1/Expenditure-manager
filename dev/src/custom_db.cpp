@@ -9,6 +9,7 @@ CustomDB::CustomDB(QObject *parent) : QObject(parent), db(QSqlDatabase::addDatab
         qDebug() << "Cannot open database:";
     }
     query = new QSqlQuery();
+    executeQuery("PRAGMA foreign_keys=ON");
 }
 
 // Execute la requête indiquée et place l'objet query sur le premier élement de la table.
