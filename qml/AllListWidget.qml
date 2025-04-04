@@ -107,7 +107,7 @@ Item {
 
     function delete_list(list_name) {
         db.executeQuery("DELETE FROM Liste WHERE nom LIKE \"%1\"".arg(list_name))
-        msgDisplayer.setMessage("La liste <b>\"%1\"</b> a été supprimée".arg(list_name))
+        msgDisplayer.setMessage("La liste <b>%1</b> a été supprimée".arg(list_name))
         gridView.update(search_bar.text, sort_type.currentText);
     }
 }
