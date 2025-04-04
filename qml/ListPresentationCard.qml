@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 
 Item {
     id: root
@@ -20,35 +21,43 @@ Item {
         border.width: 1
         border.color: "#333333"
 
-        Column {
-            Text {
-                id: title
-                clip: true
-                width: content.width
-                text: root.list_title
-                font.pixelSize: 18
-                font.bold: true
-                color: "#333333"
+        Rectangle {
+            id: support
+            anchors.fill: parent
+            anchors.margins: 10
+            clip: true
+            radius: 10
+
+            Column {
+                Text {
+                    id: title
+                    clip: true
+                    width: content.width
+                    text: root.list_title
+                    font.pixelSize: 18
+                    font.bold: true
+                    color: "#333333"
+                }
+
+                Text {
+                    id: date_creation
+                    text: "Créé le "+root.list_date_creation
+                    color: "black"
+                }
+
+                Text {
+                    id: date_last_modif
+                    text: "Modifié le "+root.list_last_modif
+                    color: "black"
+                }
             }
 
             Text {
-                id: date_creation
-                text: "Créé le "+root.list_date_creation
-                color: "black"
+                id: list_number
+                anchors.bottom: parent.bottom
+                text: root.list_number_element+ " élément(s)"
+
             }
-
-            Text {
-                id: date_last_modif
-                text: "Modifié le "+root.list_last_modif
-                color: "black"
-            }
-        }
-
-        Text {
-            id: list_number
-            anchors.bottom: parent.bottom
-            text: root.list_number_element+ " élément(s)"
-
         }
 
         MouseArea {
@@ -59,6 +68,16 @@ Item {
             onClicked: {
                 selected(root.list_title)
             }
+        }
+
+        Button {
+            text: "X"
+            width: 25
+            height: 25
+            anchors.top: support.top
+            anchors.right: support.right
+
+            onClicked: console.log("test")
         }
 
         states: State {
