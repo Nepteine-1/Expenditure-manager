@@ -31,7 +31,7 @@ Item {
 
     Timer {
         id: timer
-        interval: 2000; running: false; repeat: false
+        interval: 2500; running: false; repeat: false
         onTriggered: root.opacity = 0
     }
 
