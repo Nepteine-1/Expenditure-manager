@@ -45,10 +45,13 @@ Item {
                 }
 
                 onDeleted: {
-                    deleteListDialog.list_name = model.nom
-                    deleteListDialog.nb_elmt = model.nb_elmt
-                    deleteListDialog.title="Êtes-vous sûr(e) de vouloir supprimer la liste \"%1\" ?".arg(model.nom)
-                    deleteListDialog.open()
+                    if(model.nb_elmt === "0") root.delete_list(model.nom)
+                    else {
+                        deleteListDialog.list_name = model.nom
+                        deleteListDialog.nb_elmt = model.nb_elmt
+                        deleteListDialog.title="Êtes-vous sûr(e) de vouloir supprimer la liste \"%1\" ?".arg(model.nom)
+                        deleteListDialog.open()
+                    }
                 }
             }
         }
@@ -69,7 +72,7 @@ Item {
                         break;
 
                     case "Nom ASC":
-                        query_to_execute+="nom\" COLLATE NOCASE DESC"
+                        query_to_execute+="nom\" COLLATE NOCASE DESC" // COLLATE NOCASE used with SQLite3 for alphabetic ordering but should be useless with other DBMS
                         break;
 
                     case "Nom DESC":
