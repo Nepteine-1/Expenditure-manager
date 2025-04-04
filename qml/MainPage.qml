@@ -23,7 +23,7 @@ Item {
                 placeholderText: "Rechercher.."
 
                 onTextChanged: {
-                    lists.update_list_view(search_bar.text, sort_type.currentIndex)
+                    lists.update_list_view(search_bar.text, sort_type.currentText)
                 }
             }
 
@@ -34,9 +34,9 @@ Item {
             ComboBox {
                 id: sort_type
                 width: 200
-                model: ["Aucun filtre", "Nom ASC", "Nom DESC", "Nombre d'éléments", "Date de modification", "Date de création"]
+                model: ["Date de modification", "Nom ASC", "Nom DESC", "Nombre d'éléments", "Date de création"]
                 onActivated: {
-                    lists.update_list_view(search_bar.text, sort_type.currentIndex)
+                    lists.update_list_view(search_bar.text, sort_type.currentText)
                 }
             }
         }
@@ -80,7 +80,7 @@ Item {
                 if(db.executeQuery("INSERT INTO Liste(`nom`) VALUES('"+itemNameField.text+"')")) {
                     msgDisplayer.setMessage("Liste de dépense <b>"+itemNameField.text+"</b> ajoutée")
                     itemNameField.text = ""
-                    lists.update_list_view(search_bar.text, sort_type.currentIndex)
+                    lists.update_list_view(search_bar.text, sort_type.currentText)
                 } else {
                     msgDisplayer.setMessage("Erreur : liste <b>"+itemNameField.text+"</b> déjà ajoutée")
                 }
@@ -130,6 +130,6 @@ Item {
     }
 
     function update_list() {
-        lists.update_list_view()
+        lists.update_list_view(search_bar.text, sort_type.currentText)
     }
 }

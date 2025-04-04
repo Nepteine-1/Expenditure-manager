@@ -53,39 +53,38 @@ Item {
             }
         }
 
-        Component.onCompleted:  { gridView.update(); }
+        Component.onCompleted:  { gridView.update(search_bar.text, sort_type.currentText); }
 
-        function update(list_research_token = null, sort_by = null) {
+        function update(list_research_token="", sort_by="") {
             listmodel.clear()
             let query_to_execute = "SELECT nom, date_creation, nb_elements, date_last_modif FROM Liste"
-            if(list_research_token!== null && list_research_token.length!==0) {
-                query_to_execute+=" WHERE nom LIKE \""+list_research_token+"%\""
-            }
-            if(sort_by!== null && typeof sort_by === "number" && sort_by !==0) {
+
+            if(list_research_token!== null && list_research_token.length!==0) query_to_execute+=" WHERE nom LIKE \""+list_research_token+"%\""
+
+            if(sort_by!== null && sort_by.length!==0) {
                 query_to_execute+=" ORDER BY \""
                 switch(sort_by) {
-                    case 1:
-                        query_to_execute+="nom\""
-                        break;
-
-                    case 2:
-                        query_to_execute+="nom\" DESC"
-                        break;
-
-                    case 3:
-                        query_to_execute+="nb_elements\" DESC"
-
-                        break;
-
-                    case 4:
+                    case "Date de modification":
                         query_to_execute+="date_last_modif\" DESC"
                         break;
 
-                    case 5:
+                    case "Nom ASC":
+                        query_to_execute+="nom\" DESC"
+                        break;
+
+                    case "Nom DESC":
+                        query_to_execute+="nom\""
+                        break;
+
+                    case "Nombre d'éléments":
+                        query_to_execute+="nb_elements\" DESC"
+                        break;
+
+                    case "Date de création":
                         query_to_execute+="date_creation\" DESC"
                         break;
                 }
-            }
+            } else query_to_execute+=" ORDER BY \"date_last_modif\" DESC"
 
             if(db.executeQuery(query_to_execute)) {
                 if(db.queryRowCount!==0) {
@@ -99,13 +98,13 @@ Item {
         }
     }
 
-    function update_list_view(list_research_token = null, sort_by = null) {
+    function update_list_view(list_research_token, sort_by) {
         gridView.update(list_research_token, sort_by);
     }
 
     function delete_list(list_name) {
         db.executeQuery("DELETE FROM Liste WHERE nom LIKE \"%1\"".arg(list_name))
         msgDisplayer.setMessage("La liste <b>\"%1\"</b> a été supprimée".arg(list_name))
-        gridView.update();
+        gridView.update(search_bar.text, sort_type.currentText);
     }
 }
