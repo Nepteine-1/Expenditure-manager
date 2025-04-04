@@ -69,11 +69,11 @@ Item {
                         break;
 
                     case "Nom ASC":
-                        query_to_execute+="nom\" DESC"
+                        query_to_execute+="nom\" COLLATE NOCASE DESC"
                         break;
 
                     case "Nom DESC":
-                        query_to_execute+="nom\""
+                        query_to_execute+="nom\" COLLATE NOCASE"
                         break;
 
                     case "Nombre d'éléments":
