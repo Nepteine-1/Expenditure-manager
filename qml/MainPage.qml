@@ -8,6 +8,7 @@ Item {
     signal listChoosed(list: string)
 
     Column{
+        id: toolListBar
         anchors.fill: parent
         Row {
             Button {
@@ -44,7 +45,7 @@ Item {
         Rectangle {
             id: lists_container
             width: root.width
-            height: 600
+            height: Math.min(600,root.height)-search_bar.height
             clip: true
 
             AllListWidget {
@@ -70,6 +71,7 @@ Item {
             TextField {
                 id: itemNameField
                 maximumLength: 25
+                width:addItemDialog.width-15
                 placeholderText: "Nom de l'élément"
             }
         }

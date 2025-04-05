@@ -91,13 +91,33 @@ Item {
 
             if(db.executeQuery(query_to_execute)) {
                 if(db.queryRowCount!==0) {
+                    no_list_disclaimer.opacity = 0
                     listmodel.append({"nom":db.queryResult.split("|")[0], "datetime":db.queryResult.split("|")[1], "nb_elmt":db.queryResult.split("|")[2], "last_modif":db.queryResult.split("|")[3]})
                     while(db.nextQuerry()) {
                         listmodel.append({"nom":db.queryResult.split("|")[0], "datetime":db.queryResult.split("|")[1], "nb_elmt":db.queryResult.split("|")[2], "last_modif":db.queryResult.split("|")[3]})
                     }
-
-                }
+                } else no_list_disclaimer.opacity = 1
             }
+        }
+    }
+
+    Rectangle {
+        id: no_list_disclaimer
+        anchors.fill: parent
+        color: "ivory"
+        visible: true
+        opacity: 0
+        x: parent.x
+        y: parent.y
+        clip: true
+
+        Text {
+            text: "Aucune liste de dépenses n'a été trouvée"
+            font.pixelSize: 24
+            anchors.centerIn: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WordWrap
         }
     }
 
