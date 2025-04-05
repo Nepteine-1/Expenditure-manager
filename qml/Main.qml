@@ -1,10 +1,7 @@
 import CustomComponents 1.0
 import QtQuick.Layouts
-import QtQuick.Controls
-import QtQuick
-import QtCharts as Charts
-import QtCharts 2.15
-import QtTest 1.0
+import QtQuick 2.15
+import "./Form"
 
 Window {
     id : container

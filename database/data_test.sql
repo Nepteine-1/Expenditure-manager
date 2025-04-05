@@ -5,7 +5,7 @@ PRAGMA foreign_keys = ON;
 DROP TABLE IF EXISTS `Depense`;
 CREATE TABLE `Depense` (
 	`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`nom` VARCHAR(50) NOT NULL,
+	`nom` VARCHAR(35) NOT NULL,
 	`date` DATE NOT NULL DEFAULT CURRENT_DATE,
 	`quantite` INTEGER NOT NULL DEFAULT 1,
 	`prix` INTEGER NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE `Depense` (
 	`fournisseur` VARCHAR(100),
 	FOREIGN KEY (`id_categorie`) REFERENCES `Categorie`(`id`)
 	FOREIGN KEY (`id_liste`) REFERENCES `Liste`(`id`) ON DELETE CASCADE
-	CHECK (length(`nom`)<=50)
+	CHECK (length(`nom`)<=35)
 	CHECK (length(`marque`)<=100)
 	CHECK (length(`fournisseur`)<=100)
 );
