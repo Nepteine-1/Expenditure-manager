@@ -14,7 +14,35 @@ Window {
         id:db
     }
 
-    Item {
+    Column {
+        ChooseNameWidget {
+            dbTableToFind: "Depense"
+            dbAttributeToFind: "nom"
+            placeholder: "Nom de l'article"
+        }
+
+        ChooseNameWidget {
+            dbTableToFind: "Depense"
+            dbAttributeToFind: "marque"
+            placeholder: "Marque"
+        }
+
+        ChooseNameWidget {
+            dbTableToFind: "Depense"
+            dbAttributeToFind: "fournisseur"
+            placeholder: "Fournisseur"
+        }
+
+        ChooseNumberWidget {
+            placeholder: "Prix"
+        }
+
+        ChooseNumberWidget {
+            placeholder: "Quantité"
+        }
+    }
+
+    /*Item {
         id: view_handler
 
         // Permet de passer du menu principale à une liste de dépense
@@ -49,5 +77,5 @@ Window {
 
     MessageDisplayer {
         id:msgDisplayer
-    }
+    }*/
 }
