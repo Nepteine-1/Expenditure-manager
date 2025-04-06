@@ -7,7 +7,7 @@ Item {
     width: 550
     height: 400
 
-    property string title: "Name selected List"
+    property string form_title: "Name selected List"
 
     Rectangle {
         id: support
@@ -23,13 +23,14 @@ Item {
             anchors.verticalCenter: support.verticalCenter
 
             Text {
-                id: tle
-                text : title
+                id: title
+                text : form_title
                 font.pixelSize: 24
-                font.bold: true
+                font.bold: false
             }
 
             ChooseNameWidget {
+                id: nm_dep
                 dbTableToFind: "Depense"
                 dbAttributeToFind: "nom"
                 placeholder: "Nom de l'article"
@@ -38,26 +39,31 @@ Item {
             Row {
                 spacing: 20
                 ChooseNumberWidget {
+                    id: prix
                     placeholder: "Prix"
                 }
 
                 ChooseNumberWidget {
+                    id: quantite
                     placeholder: "Quantité"
                 }
 
                 ChooseDateWidget {
+                    id: date_dep
                     width: 210
                     placeholder: "Date d'achat"
                 }
             }
 
             ChooseNameWidget {
+                id: marque
                 dbTableToFind: "Depense"
                 dbAttributeToFind: "marque"
                 placeholder: "Marque"
             }
 
             ChooseNameWidget {
+                id: fournisseur
                 dbTableToFind: "Depense"
                 dbAttributeToFind: "fournisseur"
                 placeholder: "Nom du fournisseur"
