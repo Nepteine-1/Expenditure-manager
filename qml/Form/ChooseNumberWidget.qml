@@ -21,7 +21,7 @@ Item {
 
         onTextChanged: {
             // Remove non-digit characters
-            field.text = text.replace(/[^0-9]/g, "")
+            field.text = field.text.replace(/[^0-9]/g, "")
         }
     }
 }

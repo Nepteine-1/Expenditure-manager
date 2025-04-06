@@ -33,7 +33,6 @@ Item {
                 completion.text = ""
                 field.proposition = field.text
             }
-            console.log(field.proposition)
         }
 
         Keys.onPressed: (event) => {
