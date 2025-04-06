@@ -1,25 +1,55 @@
 import QtQuick 2.15
+import QtQuick.Controls
 import QtQuick.Controls.Material
+import QtQuick.Controls.Universal 2.15 as Univers
 import QtQuick.Layouts
 
 Item {
-    visible: true
-    width: 50
-    height:50
+    width:1
+    height:1
+    Material.accent: Material.Blue
 
-    Button {
-        text: "Ouvrir le calendrier"
-        onClicked: dateDialog.open()
+    TextField {
+        property bool settingUp_DateString: false
+        id:txtfield
+        placeholderText: "Date"
+        width: 175
+        maximumLength: 10
+
+        onTextEdited: {
+            txtfield.text = txtfield.text.replace(/[^0-9]/g, "")
+            let mask = txtfield.text
+
+            let res=""
+            if(mask.length>6) res = mask.substring(0,4)+"-"+mask.substring(4,6)+"-"+mask.substring(6,mask.length)
+            else if(mask.length>4) res = mask.substring(0,4)+"-"+mask.substring(4,mask.length)
+            else res = mask.substring(0,mask.length)
+
+            txtfield.text = res
+        }
+
+        Univers.Button {
+            height: txtfield.height
+            anchors.right: txtfield.right
+            width: 50
+            text: "📅"
+            onClicked: dateDialog.open()
+        }
     }
 
     Dialog {
         id: dateDialog
         title: "Sélectionner une date"
         modal: true
+        x:txtfield.x + txtfield.width
+        y:txtfield.y
         standardButtons: Dialog.Ok | Dialog.Cancel
 
         onAccepted: {
-            console.log("Date sélectionnée: " + selectedDate.toLocaleDateString("fr-FR", { year: "numeric", month: "2-digit", day: "2-digit" }))
+            let tmp = selectedDate.getFullYear()+"-"
+                    + ((Number(selectedDate.getMonth())+1) > 10 ? (Number(selectedDate.getMonth())+1) : "0"+(Number(selectedDate.getMonth())+1))+"-"
+                    + (Number(selectedDate.getDate()) > 10 ? Number(selectedDate.getDate()) : "0"+Number(selectedDate.getDate()))
+            txtfield.text = tmp
         }
 
         contentItem: Column {
