@@ -22,7 +22,7 @@ Item {
         property string proposition:""
 
         placeholderText: root.placeholder
-        width: 510
+        width: 500
         height: 45
         maximumLength: 35
         onTextChanged: {
@@ -50,12 +50,14 @@ Item {
             if(field.activeFocus) completion.text="<font color='#D3D3D3'>"+field.proposition.substring(field.text.length).replace(/ /g, '&nbsp;')+"</font>"
             else completion.text = ""
         }
-    }
 
-    Text {
-        id:completion
-        text: ""
-        x: field.x + field.leftPadding + field.contentWidth
-        anchors.verticalCenter: field.verticalCenter
+        Text {
+            id:completion
+            width: field.width - field.contentWidth - field.leftPadding*2
+            text: ""
+            x: field.x + field.leftPadding + field.contentWidth
+            anchors.verticalCenter: field.verticalCenter
+            clip: true
+        }
     }
 }

@@ -40,6 +40,10 @@ Window {
         ChooseNumberWidget {
             placeholder: "Quantité"
         }
+
+        ChooseDateWidget {
+
+        }
     }
 
     /*Item {
