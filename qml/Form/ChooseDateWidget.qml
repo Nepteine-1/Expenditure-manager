@@ -5,15 +5,19 @@ import QtQuick.Controls.Universal 2.15 as Univers
 import QtQuick.Layouts
 
 Item {
-    width:1
-    height:1
+    id:root
+    width: 175
+    height: 45
     Material.accent: Material.Blue
+
+    property string placeholder: ""
 
     TextField {
         property bool settingUp_DateString: false
         id:txtfield
-        placeholderText: "Date"
-        width: 175
+        placeholderText: root.placeholder
+        width: root.width
+        height: root.height
         maximumLength: 10
 
         onTextEdited: {

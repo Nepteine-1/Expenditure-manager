@@ -35,6 +35,7 @@ qt_add_qml_module(appExpenditure-manager
     QML_FILES qml/Form/ChooseNameWidget.qml
     QML_FILES qml/Form/ChooseNumberWidget.qml
     QML_FILES qml/Form/ChooseDateWidget.qml
+    QML_FILES qml/NewAddExpenditureWidget.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

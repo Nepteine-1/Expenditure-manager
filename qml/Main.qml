@@ -1,7 +1,5 @@
 import CustomComponents 1.0
-import QtQuick.Layouts
 import QtQuick 2.15
-import "./Form"
 
 Window {
     id : container
@@ -14,39 +12,7 @@ Window {
         id:db
     }
 
-    Column {
-        ChooseNameWidget {
-            dbTableToFind: "Depense"
-            dbAttributeToFind: "nom"
-            placeholder: "Nom de l'article"
-        }
-
-        ChooseNameWidget {
-            dbTableToFind: "Depense"
-            dbAttributeToFind: "marque"
-            placeholder: "Marque"
-        }
-
-        ChooseNameWidget {
-            dbTableToFind: "Depense"
-            dbAttributeToFind: "fournisseur"
-            placeholder: "Fournisseur"
-        }
-
-        ChooseNumberWidget {
-            placeholder: "Prix"
-        }
-
-        ChooseNumberWidget {
-            placeholder: "Quantité"
-        }
-
-        ChooseDateWidget {
-
-        }
-    }
-
-    /*Item {
+    Item {
         id: view_handler
 
         // Permet de passer du menu principale à une liste de dépense
@@ -81,5 +47,5 @@ Window {
 
     MessageDisplayer {
         id:msgDisplayer
-    }*/
+    }
 }

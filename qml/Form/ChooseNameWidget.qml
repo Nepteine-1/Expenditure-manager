@@ -8,8 +8,8 @@ import QtQuick.Controls.Material 2.15
 // The user can also specify a placeholder for the TextField component
 Item {
     id:root
-    width: field.width
-    height: field.height
+    width: 500
+    height: 45
     Material.accent: Material.Blue
 
     property string dbAttributeToFind : ""
@@ -22,8 +22,8 @@ Item {
         property string proposition:""
 
         placeholderText: root.placeholder
-        width: 500
-        height: 45
+        width: root.width
+        height: root.height
         maximumLength: 35
         onTextChanged: {
             if(field.text.length>0 && db.executeQuery("SELECT "+root.dbAttributeToFind+" FROM "+root.dbTableToFind+" WHERE "+root.dbAttributeToFind+" LIKE \"%1\%\" LIMIT 1".arg(field.text)) && db.queryResult.length > 0) {

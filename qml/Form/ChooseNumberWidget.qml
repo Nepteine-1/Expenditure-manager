@@ -3,8 +3,8 @@ import QtQuick.Controls.Material 2.15
 
 Item {
     id:root
-    width: field.width
-    height: field.height
+    width: 125
+    height: 45
     Material.accent: Material.Blue
 
     property string placeholder: ""
@@ -15,8 +15,8 @@ Item {
         property string proposition:""
 
         placeholderText: root.placeholder
-        width: 125
-        height: 45
+        width: root.width
+        height: root.height
         maximumLength: 7
 
         onTextChanged: {
