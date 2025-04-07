@@ -59,4 +59,7 @@ Item {
             clip: true
         }
     }
+
+    function getText() { return field.text }
+    function clear() { field.text="" }
 }

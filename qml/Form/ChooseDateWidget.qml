@@ -150,4 +150,7 @@ Item {
     property int currentYear: currentDate.getFullYear()
     property int currentMonth: currentDate.getMonth()
     property date selectedDate: currentDate
+
+    function getText() { return txtfield.text }
+    function clear() { txtfield.text="" }
 }

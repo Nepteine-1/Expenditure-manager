@@ -24,4 +24,7 @@ Item {
             field.text = field.text.replace(/[^0-9]/g, "")
         }
     }
+
+    function getText() { return field.text }
+    function clear() { field.text="" }
 }
