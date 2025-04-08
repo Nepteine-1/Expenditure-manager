@@ -10,9 +10,6 @@ Item {
     height: 45
     Material.accent: Material.Blue
 
-
-
-
     property string placeholder: ""
 
     TextField {

@@ -14,7 +14,7 @@ Item {
         anchors.fill: root
         radius: 15
         border.width: 1
-        color:"ivory"
+        color:"#fafafa"
 
         Column {
             id:content
@@ -29,11 +29,21 @@ Item {
                 font.bold: false
             }
 
-            ChooseNameWidget {
-                id: nm_dep
-                dbTableToFind: "Depense"
-                dbAttributeToFind: "nom"
-                placeholder: "Nom de l'article"
+            Row {
+                spacing: 20
+                ChooseNameWidget {
+                    id: nm_dep
+                    width: 270
+                    dbTableToFind: "Depense"
+                    dbAttributeToFind: "nom"
+                    placeholder: "Nom de l'article"
+                }
+
+                ChooseCategoryWidget {
+                    id: category
+                    height: 45
+                    width : 210
+                }
             }
 
             Row {
@@ -76,14 +86,27 @@ Item {
                 text: "Ajouter une dépense"
 
                 onClicked: {
-                    console.log(new Date(date_dep.getText()) <= new Date())
                     if(nm_dep.getText().length>0 && prix.getText().length>0 && quantite.getText().length>0
                             && date_dep.getText().length===10 && (new Date(date_dep.getText()) <= new Date())
-                            && marque.getText().length>0 && fournisseur.getText().length>0) {
-                        db.executeQuery("INSERT INTO `Depense` (`nom`, `quantite`, `date`, `marque`, `fournisseur`, `prix`) VALUES (\"%1\", %2, %3, \"%4\", \"%5\", %6)".arg(nm_dep.getText()).arg(quantite.getText()).arg(date_dep.getText()).arg(marque.getText()).arg(fournisseur.getText()).arg(prix.getText()))
+                            && marque.getText().length>0 && fournisseur.getText().length>0 && category.categ_choosed) {
+                       if(db.executeQuery("SELECT id FROM Categorie WHERE nom=\"%1\";".arg(category.getText()))) {
+                           let category_id = db.queryResult;
+                           db.executeQuery("INSERT INTO `Depense` (`id_categorie`, `nom`, `quantite`, `date`, `marque`, `fournisseur`, `prix`) VALUES (\"%1\", \"%2\", \"%3\", \"%4\", \"%5\", \"%6\", \"%7\")".arg(category_id).arg(nm_dep.getText()).arg(quantite.getText()).arg(date_dep.getText()).arg(marque.getText()).arg(fournisseur.getText()).arg(prix.getText()))
+                           support.clear_form()
+                       }
                     }
                 }
             }
+        }
+
+        function clear_form() {
+            prix.clear()
+            quantite.clear()
+            date_dep.clear()
+            marque.clear()
+            fournisseur.clear()
+            category.clear()
+            nm_dep.clear()
         }
     }
 }
