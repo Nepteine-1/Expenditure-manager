@@ -62,7 +62,7 @@ Item {
         function refresh () {
             db.executeQuery("SELECT GROUP_CONCAT(nom) FROM Categorie");
             list.clear()
-            for (const element of db.queryResult.split(",")) {
+            for (const element of db.queryResult.split(",").sort()) {
                 list.append({"text": element})
             }
         }
