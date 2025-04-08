@@ -10,6 +10,9 @@ Item {
     height: 45
     Material.accent: Material.Blue
 
+
+
+
     property string placeholder: ""
 
     TextField {
@@ -19,7 +22,7 @@ Item {
         width: root.width
         height: root.height
         maximumLength: 10
-
+        
         onTextEdited: {
             txtfield.text = txtfield.text.replace(/[^0-9]/g, "")
             let mask = txtfield.text

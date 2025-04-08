@@ -74,6 +74,15 @@ Item {
                 width:  content.width
                 height:  45
                 text: "Ajouter une dépense"
+
+                onClicked: {
+                    console.log(new Date(date_dep.getText()) <= new Date())
+                    if(nm_dep.getText().length>0 && prix.getText().length>0 && quantite.getText().length>0
+                            && date_dep.getText().length===10 && (new Date(date_dep.getText()) <= new Date())
+                            && marque.getText().length>0 && fournisseur.getText().length>0) {
+                        db.executeQuery("INSERT INTO `Depense` (`nom`, `quantite`, `date`, `marque`, `fournisseur`, `prix`) VALUES (\"%1\", %2, %3, \"%4\", \"%5\", %6)".arg(nm_dep.getText()).arg(quantite.getText()).arg(date_dep.getText()).arg(marque.getText()).arg(fournisseur.getText()).arg(prix.getText()))
+                    }
+                }
             }
         }
     }
