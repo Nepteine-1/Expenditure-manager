@@ -15,7 +15,7 @@ Item {
         queryBuilder.query_where = "WHERE id_liste="+queryBuilder.query_list
         queryBuilder.query_selected_year = (function () { db.executeQuery("SELECT MAX(strftime('%Y',date)) FROM Depense WHERE id_liste="+queryBuilder.query_list); return db.queryResult;})()
         queryBuilder.query_attribute = "prix*quantite"
-        expAddWidget.selected_list = list_choosed
+        expAddWidget.selected_list_id = list_choosed
         expAddWidget.clear()
         barChartsCbGrpCategoryChooser.currentIndex=0
         barChartsRbGrpPeriodChooserMonthBtn.checked = false
@@ -260,7 +260,19 @@ Item {
             }
 
             // Section ajout dépense
-            AddExpenditureWidget {
+            NewAddExpenditureWidget {
+                id: expAddWidget
+
+                onObjectAdded : {
+                    liste_depense.refresh();
+                    chart_widget_updater.full_update()
+                    chart_page.setChartVisibility(true)
+                }
+
+                Component.onCompleted: {expAddWidget.selected_list_id = queryBuilder.query_list}
+            }
+
+            /*AddExpenditureWidget {
                 id: expAddWidget
 
                 onObjectAdded : {
@@ -270,7 +282,7 @@ Item {
                 }
 
                 Component.onCompleted: {expAddWidget.selected_list = queryBuilder.query_list}
-            }
+            }*/
 
             // Liste des dépenses
             ExpenditureList {

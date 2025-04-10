@@ -8,6 +8,9 @@ Item {
     height: 400
 
     property string form_title: "Name selected List"
+    property string selected_list_id: ""
+
+    signal objectAdded()
 
     Rectangle {
         id: support
@@ -86,27 +89,28 @@ Item {
                 text: "Ajouter une dépense"
 
                 onClicked: {
-                    if(nm_dep.getText().length>0 && prix.getText().length>0 && quantite.getText().length>0
+                    console.log()
+                    if(root.selected_list_id.length !==0 && nm_dep.getText().length>0 && prix.getText().length>0 && quantite.getText().length>0
                             && date_dep.getText().length===10 && (new Date(date_dep.getText()) <= new Date())
                             && marque.getText().length>0 && fournisseur.getText().length>0 && category.categ_choosed) {
                        if(db.executeQuery("SELECT id FROM Categorie WHERE nom=\"%1\";".arg(category.getText()))) {
                            let category_id = db.queryResult;
-                           db.executeQuery("INSERT INTO `Depense` (`id_categorie`, `nom`, `quantite`, `date`, `marque`, `fournisseur`, `prix`) VALUES (\"%1\", \"%2\", \"%3\", \"%4\", \"%5\", \"%6\", \"%7\")".arg(category_id).arg(nm_dep.getText()).arg(quantite.getText()).arg(date_dep.getText()).arg(marque.getText()).arg(fournisseur.getText()).arg(prix.getText()))
-                           support.clear_form()
+                           db.executeQuery("INSERT INTO `Depense` (`id_categorie`, `id_liste`, `nom`, `quantite`, `date`, `marque`, `fournisseur`, `prix`) VALUES (\"%1\", \"%2\", \"%3\", \"%4\", \"%5\", \"%6\", \"%7\", \"8\")".arg(category_id).arg(root.selected_list_id).arg(nm_dep.getText()).arg(quantite.getText()).arg(date_dep.getText()).arg(marque.getText()).arg(fournisseur.getText()).arg(prix.getText()))
+                           objectAdded()
+                           root.clear()
                        }
                     }
                 }
             }
         }
+    }
 
-        function clear_form() {
-            prix.clear()
-            quantite.clear()
-            date_dep.clear()
-            marque.clear()
-            fournisseur.clear()
-            category.clear()
-            nm_dep.clear()
-        }
+    function clear() {
+        prix.clear()
+        quantite.clear()
+        date_dep.clear()
+        marque.clear()
+        fournisseur.clear()
+        nm_dep.clear()
     }
 }
