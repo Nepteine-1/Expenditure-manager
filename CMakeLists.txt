@@ -23,7 +23,6 @@ qt_add_qml_module(appExpenditure-manager
     VERSION 1.0
     QML_FILES qml/Main.qml
     SOURCES dev/include/custom_db.h dev/src/custom_db.cpp
-    QML_FILES qml/AddExpenditureWidget.qml
     QML_FILES qml/AllListWidget.qml
     QML_FILES qml/ChartPage.qml
     QML_FILES qml/CreateCategory.qml
@@ -35,7 +34,7 @@ qt_add_qml_module(appExpenditure-manager
     QML_FILES qml/Form/ChooseNameWidget.qml
     QML_FILES qml/Form/ChooseNumberWidget.qml
     QML_FILES qml/Form/ChooseDateWidget.qml
-    QML_FILES qml/NewAddExpenditureWidget.qml
+    QML_FILES qml/AddExpenditureWidget.qml
     QML_FILES qml/Form/ChooseCategoryWidget.qml
 )
 

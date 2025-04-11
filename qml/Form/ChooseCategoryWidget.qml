@@ -14,7 +14,7 @@ Item {
         id: select_item
         width: parent.width
         height: parent.height
-        text: "-  Choisir une catégorie  -"
+        text: "Choisir une catégorie"
         onClicked: popup.open()
     }
 

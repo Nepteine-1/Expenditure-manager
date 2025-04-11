@@ -98,7 +98,8 @@ Item {
             }
 
             Row {
-                spacing: 10
+                spacing: 25
+                leftPadding: 10
                 Repeater {
                     model: ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"]
                     Text {

@@ -260,7 +260,7 @@ Item {
             }
 
             // Section ajout dépense
-            NewAddExpenditureWidget {
+            AddExpenditureWidget {
                 id: expAddWidget
 
                 onObjectAdded : {

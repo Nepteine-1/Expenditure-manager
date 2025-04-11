@@ -1,95 +1,116 @@
-import QtQuick
-import QtQuick.Controls
-
+import QtQuick 2.15
+import "./Form"
+import QtQuick.Controls.Universal 2.15
 
 Item {
-    property string selected_list;
+    id:root
+    width: 550
+    height: 400
 
-    width: content.width
-    height: content.height
+    property string form_title: "Name selected List"
+    property string selected_list_id: ""
 
     signal objectAdded()
 
-    Column {
-        id: content
-        Text{
-            text: "Ajoutez une dépense"
-        }
+    Rectangle {
+        id: support
+        anchors.fill: root
+        radius: 15
+        border.width: 1
+        color:"#fafafa"
 
-        TextField {
-            id: nm_dep
-            placeholderText: "Nom de la dépense"
-            width: 150
-        }
+        Column {
+            id:content
+            spacing: 15
+            anchors.horizontalCenter: support.horizontalCenter
+            anchors.verticalCenter: support.verticalCenter
 
-        TextField {
-            id: quantite
-            placeholderText: "Quantité"
-            width: 150
-        }
-
-        ComboBox {
-            id: categorie
-            width: 150
-            model: []
-
-            Component.onCompleted: {
-                updateCategoryCB()
+            Text {
+                id: title
+                text : form_title
+                font.pixelSize: 24
+                font.bold: false
             }
-        }
 
-        TextField {
-            id: date_dep
-            placeholderText: "Date de la dépense"
-            width: 150
-        }
+            Row {
+                spacing: 20
+                ChooseNameWidget {
+                    id: nm_dep
+                    width: 270
+                    dbTableToFind: "Depense"
+                    dbAttributeToFind: "nom"
+                    placeholder: "Nom de l'article"
+                }
 
-        TextField {
-            id: marque
-            placeholderText: "Marque"
-            width: 150
-        }
+                ChooseCategoryWidget {
+                    id: category
+                    height: 45
+                    width : 210
+                }
+            }
 
-        TextField {
-            id: fournisseur
-            placeholderText: "Fournisseur"
-            width: 150
-        }
+            Row {
+                spacing: 20
+                ChooseNumberWidget {
+                    id: prix
+                    placeholder: "Prix"
+                }
 
-        TextField {
-            id: prix
-            placeholderText: "Prix"
-            width: 150
-        }
+                ChooseNumberWidget {
+                    id: quantite
+                    placeholder: "Quantité"
+                }
 
-        Button {
-            text: "Ajouter"
+                ChooseDateWidget {
+                    id: date_dep
+                    width: 210
+                    placeholder: "Date d'achat"
+                }
+            }
 
-            onClicked: {
-                if(db.executeQuery("SELECT id FROM Categorie WHERE nom=\"%1\";".arg(categorie.currentText))) {
-                    let category_id = db.queryResult;
-                    if(db.executeQuery("INSERT INTO Depense (nom, quantite, date, id_categorie, marque, fournisseur, prix, id_liste) VALUES (\"%1\", %2, \"%7\", %3, \"%4\", \"%5\", %6, %8);".arg(nm_dep.text).arg(quantite.text).arg(category_id).arg(marque.text).arg(fournisseur.text).arg(prix.text).arg(date_dep.text).arg(selected_list))) {
-                        console.log("New Item added with success");
-                        objectAdded()
-                        clear()
+            ChooseNameWidget {
+                id: marque
+                dbTableToFind: "Depense"
+                dbAttributeToFind: "marque"
+                placeholder: "Marque"
+            }
+
+            ChooseNameWidget {
+                id: fournisseur
+                dbTableToFind: "Depense"
+                dbAttributeToFind: "fournisseur"
+                placeholder: "Nom du fournisseur"
+            }
+
+            Button {
+                id: createExpenseBtn
+                width:  content.width
+                height:  45
+                text: "Ajouter une dépense"
+
+                onClicked: {
+                    console.log()
+                    if(root.selected_list_id.length !==0 && nm_dep.getText().length>0 && prix.getText().length>0 && quantite.getText().length>0
+                            && date_dep.getText().length===10 && (new Date(date_dep.getText()) <= new Date())
+                            && marque.getText().length>0 && fournisseur.getText().length>0 && category.categ_choosed) {
+                       if(db.executeQuery("SELECT id FROM Categorie WHERE nom=\"%1\";".arg(category.getText()))) {
+                           let category_id = db.queryResult;
+                           db.executeQuery("INSERT INTO `Depense` (`id_categorie`, `id_liste`, `nom`, `quantite`, `date`, `marque`, `fournisseur`, `prix`) VALUES (\"%1\", \"%2\", \"%3\", \"%4\", \"%5\", \"%6\", \"%7\", \"8\")".arg(category_id).arg(root.selected_list_id).arg(nm_dep.getText()).arg(quantite.getText()).arg(date_dep.getText()).arg(marque.getText()).arg(fournisseur.getText()).arg(prix.getText()))
+                           objectAdded()
+                           root.clear()
+                       }
                     }
                 }
             }
         }
     }
 
-    function updateCategoryCB() {
-        db.executeQuery("SELECT GROUP_CONCAT(nom) FROM Categorie");
-        categorie.model = db.queryResult.split(",");
-    }
-
     function clear() {
-        nm_dep.text = ""
-        quantite.text = ""
-        categorie.currentIndex = 0
-        date_dep.text = ""
-        marque.text = ""
-        fournisseur.text = ""
-        prix.text = ""
+        prix.clear()
+        quantite.clear()
+        date_dep.clear()
+        marque.clear()
+        fournisseur.clear()
+        nm_dep.clear()
     }
 }
