@@ -35,7 +35,7 @@ Item {
         Univers.Button {
             height: txtfield.height
             anchors.right: txtfield.right
-            width: 50
+            width: 45
             text: "📅"
             onClicked: dateDialog.open()
         }

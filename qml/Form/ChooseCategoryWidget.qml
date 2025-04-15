@@ -12,10 +12,18 @@ Item {
 
     Univers.Button {
         id: select_item
-        width: parent.width
+        width: parent.width-45
         height: parent.height
         text: "Choisir une catégorie"
         onClicked: popup.open()
+    }
+
+    Univers.Button {
+        id:button_create_category
+        width: 45
+        height: parent.height
+        text: "⚙️"
+        anchors.left: select_item.right
     }
 
     Popup {
@@ -38,12 +46,21 @@ Item {
                 }
 
                 delegate: ItemDelegate {
+                    id: delegateMod
                     text: model.text
-                    width: view.width
+                    width: view.width - 17
                     onClicked: {
                         select_item.text = text
                         root.categ_choosed = true
                         popup.close()
+                    }
+
+                    Univers.Button {
+                        width: 20
+                        height: delegateMod.height - 20
+                        text: "x"
+                        anchors.right: delegateMod.right
+                        anchors.verticalCenter: delegateMod.verticalCenter
                     }
                 }
 
