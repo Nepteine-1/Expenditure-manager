@@ -61,6 +61,11 @@ Item {
                         text: "x"
                         anchors.right: delegateMod.right
                         anchors.verticalCenter: delegateMod.verticalCenter
+
+                        onClicked: {
+                            db.executeQuery("DELETE FROM Categorie WHERE nom LIKE \"%1\";".arg(model.text))
+                            popup.refresh()
+                        }
                     }
                 }
 

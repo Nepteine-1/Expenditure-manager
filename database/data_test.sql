@@ -13,7 +13,7 @@ CREATE TABLE `Depense` (
 	`id_categorie` INTEGER NOT NULL DEFAULT 1,
 	`marque` VARCHAR(100),
 	`fournisseur` VARCHAR(100),
-	FOREIGN KEY (`id_categorie`) REFERENCES `Categorie`(`id`)
+	FOREIGN KEY (`id_categorie`) REFERENCES `Categorie`(`id`) ON DELETE SET DEFAULT
 	FOREIGN KEY (`id_liste`) REFERENCES `Liste`(`id`) ON DELETE CASCADE
 	CHECK (length(`nom`)<=35)
 	CHECK (length(`marque`)<=100)
