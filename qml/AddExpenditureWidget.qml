@@ -95,7 +95,7 @@ Item {
                             && marque.getText().length>0 && fournisseur.getText().length>0 && category.categ_choosed) {
                        if(db.executeQuery("SELECT id FROM Categorie WHERE nom=\"%1\";".arg(category.getText()))) {
                            let category_id = db.queryResult;
-                           db.executeQuery("INSERT INTO `Depense` (`id_categorie`, `id_liste`, `nom`, `quantite`, `date`, `marque`, `fournisseur`, `prix`) VALUES (\"%1\", \"%2\", \"%3\", \"%4\", \"%5\", \"%6\", \"%7\", \"8\")".arg(category_id).arg(root.selected_list_id).arg(nm_dep.getText()).arg(quantite.getText()).arg(date_dep.getText()).arg(marque.getText()).arg(fournisseur.getText()).arg(prix.getText()))
+                           db.executeQuery("INSERT INTO `Depense` (`id_categorie`, `id_liste`, `nom`, `quantite`, `date`, `marque`, `fournisseur`, `prix`) VALUES (\"%1\", \"%2\", \"%3\", \"%4\", \"%5\", \"%6\", \"%7\", \"8\");".arg(category_id).arg(root.selected_list_id).arg(nm_dep.getText()).arg(quantite.getText()).arg(date_dep.getText()).arg(marque.getText()).arg(fournisseur.getText()).arg(prix.getText()))
                            objectAdded()
                            root.clear()
                        }

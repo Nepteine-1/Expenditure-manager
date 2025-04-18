@@ -20,7 +20,7 @@ Window {
         // (il sera automatiquement affiché à nouveau quand l'utilisateur aura ajouté sa 1ere dépense)
         function getChartPageFromList(list_id) {
             main_page.visible = false
-            db.executeQuery("SELECT * FROM Depense WHERE id_liste=%1".arg(list_id))
+            db.executeQuery("SELECT * FROM Depense WHERE id_liste=%1;".arg(list_id))
             if(db.queryRowCount===0) chart_page.setChartVisibility(false)
             chart_page.initPage(list_id)
             chart_page.visible = true

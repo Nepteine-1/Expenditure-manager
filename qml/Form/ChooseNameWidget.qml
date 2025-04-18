@@ -26,7 +26,7 @@ Item {
         height: root.height
         maximumLength: 35
         onTextChanged: {
-            if(field.text.length>0 && db.executeQuery("SELECT "+root.dbAttributeToFind+" FROM "+root.dbTableToFind+" WHERE "+root.dbAttributeToFind+" LIKE \"%1\%\" LIMIT 1".arg(field.text)) && db.queryResult.length > 0) {
+            if(field.text.length>0 && db.executeQuery("SELECT "+root.dbAttributeToFind+" FROM "+root.dbTableToFind+" WHERE "+root.dbAttributeToFind+" LIKE \"%1\%\" LIMIT 1;".arg(field.text)) && db.queryResult.length > 0) {
                     completion.text = "<font color='#D3D3D3'>"+db.queryResult.substring(field.text.length).replace(/ /g, '&nbsp;')+"</font>"
                     field.proposition = db.queryResult
             } else {

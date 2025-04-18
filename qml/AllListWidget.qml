@@ -40,7 +40,7 @@ Item {
                 anchors.centerIn: parent
 
                 onSelected: {
-                    db.executeQuery("SELECT id FROM Liste WHERE nom LIKE \"%1\"".arg(model.nom))
+                    db.executeQuery("SELECT id FROM Liste WHERE nom LIKE \"%1\";".arg(model.nom))
                     listChoosed(db.queryResult)
                 }
 
@@ -68,26 +68,26 @@ Item {
                 query_to_execute+=" ORDER BY \""
                 switch(sort_by) {
                     case "Date de modification":
-                        query_to_execute+="date_last_modif\" DESC"
+                        query_to_execute+="date_last_modif\" DESC;"
                         break;
 
                     case "Nom ASC":
-                        query_to_execute+="nom\" COLLATE NOCASE DESC" // COLLATE NOCASE used with SQLite3 for alphabetic ordering but should be useless with other DBMS
+                        query_to_execute+="nom\" COLLATE NOCASE DESC;" // COLLATE NOCASE used with SQLite3 for alphabetic ordering but should be useless with other DBMS
                         break;
 
                     case "Nom DESC":
-                        query_to_execute+="nom\" COLLATE NOCASE"
+                        query_to_execute+="nom\" COLLATE NOCASE;"
                         break;
 
                     case "Nombre d'éléments":
-                        query_to_execute+="nb_elements\" DESC"
+                        query_to_execute+="nb_elements\" DESC;"
                         break;
 
                     case "Date de création":
-                        query_to_execute+="date_creation\" DESC"
+                        query_to_execute+="date_creation\" DESC;"
                         break;
                 }
-            } else query_to_execute+=" ORDER BY \"date_last_modif\" DESC"
+            } else query_to_execute+=" ORDER BY \"date_last_modif\" DESC;"
 
             if(db.executeQuery(query_to_execute)) {
                 if(db.queryRowCount!==0) {
@@ -126,7 +126,7 @@ Item {
     }
 
     function delete_list(list_name) {
-        db.executeQuery("DELETE FROM Liste WHERE nom LIKE \"%1\"".arg(list_name))
+        db.executeQuery("DELETE FROM Liste WHERE nom LIKE \"%1\";".arg(list_name))
         msgDisplayer.setMessage("La liste <b>%1</b> a été supprimée".arg(list_name))
         gridView.update(search_bar.text, sort_type.currentText);
     }

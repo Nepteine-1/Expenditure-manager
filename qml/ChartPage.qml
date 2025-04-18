@@ -49,7 +49,7 @@ Item {
         property string query_attribute: "prix*quantite"
 
         function buildQuerry() {
-            return "SELECT " + queryBuilder.query_operation + "(" + queryBuilder.query_attribute + ") as op, strftime('" + queryBuilder.query_periode + "', date) FROM Depense " + queryBuilder.query_where + " GROUP BY strftime('" + queryBuilder.query_periode + "', date)";
+            return "SELECT " + queryBuilder.query_operation + "(" + queryBuilder.query_attribute + ") as op, strftime('" + queryBuilder.query_periode + "', date) FROM Depense " + queryBuilder.query_where + " GROUP BY strftime('" + queryBuilder.query_periode + "', date);";
         }
     }
 
@@ -59,8 +59,8 @@ Item {
 
         function update_year_chooser() {
             console.log("*** UPDATE YEAR CHOOSER ***")
-            if(barChartsCbGrpCategoryChooser.currentIndex === 0) db.executeQuery("SELECT MAX(strftime('%Y',date)), MIN(strftime('%Y',date)) FROM Depense WHERE id_liste="+queryBuilder.query_list);
-            else db.executeQuery("SELECT MAX(strftime('%Y',date)), MIN(strftime('%Y',date)) FROM Depense JOIN Categorie on Categorie.id = Depense.id_categorie WHERE Categorie.nom = '"+barChartsCbGrpCategoryChooser.currentText+"' AND id_liste="+queryBuilder.query_list);
+            if(barChartsCbGrpCategoryChooser.currentIndex === 0) db.executeQuery("SELECT MAX(strftime('%Y',date)), MIN(strftime('%Y',date)) FROM Depense WHERE id_liste="+queryBuilder.query_list+";");
+            else db.executeQuery("SELECT MAX(strftime('%Y',date)), MIN(strftime('%Y',date)) FROM Depense JOIN Categorie on Categorie.id = Depense.id_categorie WHERE Categorie.nom = '"+barChartsCbGrpCategoryChooser.currentText+"' AND id_liste="+queryBuilder.query_list+";");
             if(!isNaN(Number(db.queryResult.split("|")[0])) && !isNaN(Number(db.queryResult.split("|")[1]))) {
                 if(barChartsRbGrpYearChooser.to !== Number(db.queryResult.split("|")[0]) || barChartsRbGrpYearChooser.from !== Number(db.queryResult.split("|")[1])) barChartsRbGrpYearChooser.changedbyUser=false;
                 barChartsRbGrpYearChooser.to = Number(db.queryResult.split("|")[0]);
@@ -92,7 +92,7 @@ Item {
             mySeries.clear()
 
             let query = queryBuilder.buildQuerry();
-            db.executeQuery("SELECT MAX(op) FROM ("+query+")")
+            db.executeQuery("SELECT MAX(op) FROM ("+query+");")
             axisY8.max = Number(db.queryResult.split("|")[0])+ Number(db.queryResult.split("|")[0])*(0.1)
             db.executeQuery(query)
 
@@ -190,7 +190,7 @@ Item {
 
                     function update() {
                         let prev_indx = barChartsCbGrpCategoryChooser.currentIndex
-                        db.executeQuery("SELECT GROUP_CONCAT(nom) FROM Categorie");
+                        db.executeQuery("SELECT GROUP_CONCAT(nom) FROM Categorie;");
                         let barSetElmt = db.queryResult.split(",");
                         barSetElmt.unshift("Tout");
                         barChartsCbGrpCategoryChooser.model = barSetElmt;

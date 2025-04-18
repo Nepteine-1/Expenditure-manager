@@ -79,7 +79,7 @@ Item {
         onAccepted: {
             const regex = /^[a-zA-Z0-9\s-_]+$/;
             if(regex.test(itemNameField.text) && itemNameField.text.length <= 25) {
-                if(db.executeQuery("INSERT INTO Liste(`nom`) VALUES('"+itemNameField.text+"')")) {
+                if(db.executeQuery("INSERT INTO Liste(`nom`) VALUES('"+itemNameField.text+"');")) {
                     msgDisplayer.setMessage("Liste de dépense <b>"+itemNameField.text+"</b> ajoutée")
                     itemNameField.text = ""
                     lists.update_list_view(search_bar.text, sort_type.currentText)
